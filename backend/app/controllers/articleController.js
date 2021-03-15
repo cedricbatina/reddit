@@ -27,9 +27,9 @@ exports.findAll = () => {
   ).then((articles) => {
     return articles;
   });
-};
+};*/
 
-exports.getAllArticles = (req, res) => {
+exports.findAll = (req, res) => {
   let title = req.body.title;
   let condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
   console.log(Article);
@@ -39,7 +39,7 @@ exports.getAllArticles = (req, res) => {
       console.log(error);
       res.status(500).json({ error });
     });
-};*/
+};
 /*
 // create an article endpoints
 exports.createArticle = (req, res) => {
@@ -89,7 +89,9 @@ exports.createArticle = (req, res, next) => {
     //usersDisliked: [],
   };
   Article.create(article)
-    .then(() =>
+    .then(
+      (article) => console.log(article),
+
       res.status(201).json({
         message: " Votre article a bien été ajouté !!!",
       })
