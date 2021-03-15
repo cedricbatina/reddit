@@ -89,9 +89,9 @@ exports.createArticle = (req, res, next) => {
     //usersDisliked: [],
   };
   Article.create(article)
-    .then((article) =>
+    .then(() =>
       res.status(201).json({
-        message: " Votre article" + article + " a bien été ajouté !!!",
+        message: " Votre article a bien été ajouté !!!",
       })
     )
     .catch((error) => {

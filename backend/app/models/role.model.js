@@ -1,6 +1,3 @@
-const Sequelize = require("sequelize");
-const { sequelize } = require("../config/db.config");
-
 module.exports = (sequelize, Sequelize) => {
   const Role = sequelize.define("roles", {
     id: {
