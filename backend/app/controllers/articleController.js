@@ -1,5 +1,5 @@
 const Article = require("../models/index").article;
-const Comment = require("../models/index").comments;
+const Comment = require("../models/index").comment;
 
 exports.findAll = (req, res) => {
   let title = req.body.title;
@@ -23,7 +23,7 @@ exports.findAll = () => {
   ).then((articles) => {
     return articles;
   });
-};*/
+};
 
 exports.findAll = (req, res) => {
   let title = req.body.title;
@@ -36,7 +36,7 @@ exports.findAll = (req, res) => {
       res.status(500).json({ error });
     });
 };
-/*
+
 // create an article endpoints
 exports.createArticle = (req, res) => {
   return Article.create({
@@ -171,7 +171,7 @@ exports.deleteAll = (req, res, next) => {
 // endpoint to find article
 exports.getOneArticle = (req, res, next) => {
   const id = req.params.id;
-  const comment = req.params.comments;
+  const comment = req.params.comment;
   console.log(id);
   Article.findOne({ where: { id: id }, include: ["comments"] })
     //Article.findByPk(/*{ where: { id: id }, include: ["comments"] }*/)
@@ -208,10 +208,8 @@ exports.createComment = (req, res) => {
     res.status(400).send({
       message: "Le texte ne peut être vide !!!",
     });
-
     return;
   }
-
   const comment = {
     text: req.body.text,
     articleId: req.body.articleId,
