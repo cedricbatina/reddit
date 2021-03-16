@@ -42,7 +42,8 @@ export default {
         title: "",
         content: "",
         userId: "",
-        published: false
+        published: false,
+        comments: []
       },
       submitted: false
     };

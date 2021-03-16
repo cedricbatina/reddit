@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 //const userRoutes = require("../backend/app/routes/user.route");
 const articleRoutes = require("../backend/app/routes/article.route");
 //const authRoutes = require("./app/routes/auth.route");
-//const cors = require("cors");
+const cors = require("cors");
 const app = express();
 
 app.use((req, res, next) => {
@@ -20,9 +20,9 @@ app.use((req, res, next) => {
   );
   next();
 });
-
-/* corsOptions = {
-   res.setHeader("Access-Control-Allow-Origin", "*");
+/*
+const corsOptions = {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
@@ -31,8 +31,9 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
-};*/
-
+  //origin: "http://localhost:3001",
+};
+*/
 //app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(bodyParser.json()); //192.168.1.187:3004/
@@ -44,15 +45,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require("./app/models");
 const Role = db.role;
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync();
+
+/*db.sequelize.sync().then(() => {
   console.log("Drop and re-sync db.");
   initial();
 });
 
-/*db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: true }).then(() => {
   console.log("Drop and re-sync db.");
   initial();
-});*/
+});
 // global function goes here
 function initial() {
   // create a simple user's role
@@ -66,7 +69,7 @@ function initial() {
     name: "admin",
   });
 }
-
+*/
 // set  routes
 
 require("./app/routes/article.route")(app);

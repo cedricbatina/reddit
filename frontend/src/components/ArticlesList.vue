@@ -138,8 +138,8 @@ export default {
       articleId : this.currentArticle.id,
       userId : localStorage.getItem("user").id
       }
-      ArticleDataService.createComment(data) 
-        console.log(data)
+      //ArticleDataService.createComment(data) 
+       // console.log(data)
       
     ArticleDataService.createComment(data) 
       .then(response => {

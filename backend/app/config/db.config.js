@@ -4,7 +4,7 @@ module.exports = {
   PASSWORD: "",
   DB: "groupomania",
   dialect: "mysql",
-  operatorsAliases: false,
+  //operatorsAliases: false,
   pool: {
     max: 5,
     min: 0,

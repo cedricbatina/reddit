@@ -1,9 +1,5 @@
 const Article = require("../models/index").article;
 const Comment = require("../models/index").comments;
-//const User = require("../models/User"); // need the user model : RAJOUT
-//const userRole = JSON.parse(localStorage.getItem("user_roles")).roleId;
-
-//const fs = require("fs"); // importing the file system s to access to functions, in order to modify or delete files////// This is for personal further work. I wanna, after my exam to improve my app by adding code for the app user to also share images !!!
 
 exports.findAll = (req, res) => {
   let title = req.body.title;
@@ -62,7 +58,7 @@ exports.createArticle = (req, res) => {
     });
 };*/
 
-exports.createArticle = (req, res, next) => {
+exports.createArticle = (req, res) => {
   console.log(req.body);
   if (!req.body.title) {
     res.status(400).send({
@@ -77,16 +73,10 @@ exports.createArticle = (req, res, next) => {
   //const articleObject = JSON.parse(req.body.article);
   //delete articleObject._id;
   const article = {
-    //  ...articleObject,
-    //imageUrl: `${req.protocol}://${req.get("host")}/image/${req.file.filename}`,
     title: req.body.title,
     content: req.body.content,
     userId: req.body.userId,
     published: req.body.published ? req.body.published : false,
-    //likes: 0,
-    //dislikes: 0,
-    //usersLiked: [],
-    //usersDisliked: [],
   };
   Article.create(article)
     .then(
@@ -183,8 +173,8 @@ exports.getOneArticle = (req, res, next) => {
   const id = req.params.id;
   const comment = req.params.comments;
   console.log(id);
-  //Article.findOne({ where: { id: id }, include: ["comments"] })
-  Article.findByPk(/*{ where: { id: id }, include: ["comments"] }*/)
+  Article.findOne({ where: { id: id }, include: ["comments"] })
+    //Article.findByPk(/*{ where: { id: id }, include: ["comments"] }*/)
     .then((data) => {
       res.send(data);
       console.log(comment);
@@ -221,12 +211,25 @@ exports.createComment = (req, res) => {
 
     return;
   }
+
   const comment = {
     text: req.body.text,
     articleId: req.body.articleId,
     userId: req.body.userId,
   };
-  return Comment.create(comment)
+  Comment.create(comment)
+    .then(
+      (comment) => console.log(comment),
+
+      res.status(201).json({
+        message: " Votre commentaire a bien été ajouté !!!",
+      })
+    )
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: "il y a une erreur", error });
+    });
+  /*return Comment.create(comment)
     .then((comment) => {
       console.log("Commentaire crée: " + JSON.stringify(comment, null, 4));
       return comment;
@@ -236,7 +239,7 @@ exports.createComment = (req, res) => {
         "Une erreur est surveune en voulant créer le commentaire: ",
         err
       );
-    });
+    });*/
 };
 exports.deleteComment = (req, res) => {
   const id = req.params.id;
