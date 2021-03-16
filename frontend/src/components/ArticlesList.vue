@@ -136,17 +136,17 @@ export default {
     let data = {
       text: this.comments.text,
       articleId : this.currentArticle.id,
-      userId : localStorage.getItem("user").id
+      userId : JSON.parse(localStorage.getItem("user")).id
       }
       //ArticleDataService.createComment(data) 
        // console.log(data)
       
     ArticleDataService.createComment(data) 
       .then(response => {
-        this.comment.id = response.data.id;
+        this.comments.id = response.data.id;
           console.log(response.data);
           //console.log(response);
-          Comment.push(this.comments)
+          //Comment.push(this.comments)
         })
         .catch(e => {
           console.log(e);
