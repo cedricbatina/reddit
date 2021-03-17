@@ -1,6 +1,6 @@
 const Article = require("../models/index").article;
 const Comment = require("../models/index").comment;
-const User = require("../models/index").user;
+const User = require("../models/index").user.userName;
 
 exports.findAll = (req, res) => {
   let title = req.body.title;
@@ -175,18 +175,14 @@ exports.getOneArticle = (req, res, next) => {
   console.log(id);
   Article.findOne({
     where: { id: id },
-    include: [
-      {
-        model: Comment,
-        as: "Comments",
-        include: [
-          {
-            model: User.userName,
-            as: "users",
-          },
-        ],
+    include: {
+      Comment,
+      as: "Comments",
+      include: {
+        User,
+        as: "users",
       },
-    ],
+    },
   })
     //Article.findByPk(/*{ where: { id: id }, include: ["comments"] }*/)
     .then((data) => {
