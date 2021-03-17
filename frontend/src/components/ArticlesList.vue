@@ -60,10 +60,10 @@
         <a v-if=" currentArticle.userId === user.id " class="badge badge-warning"
           :href="'/articles/' + currentArticle.id"
         >Modifier</a>
-        <button class="btn btn-warning" @click="saveComment">Commenter</button>
-        <button class="btn btn-danger" v-if="comments.userId === user.id" @click="deleteComment" >Supprimer votre commentaire</button>
-        <!--<button class="btn btn-danger" v-if="user.id === comments.id">Supprimer votre commentaire</button>
-        <a class="badge badge-warning" v-if="currentArticle" :href="'/articles/' + currentArticle.id">Commenter un article</a>-->
+        <button class="badge badge-warning" @click="saveComment">Commenter</button>
+        <button class="badge badge-danger">Supprimer votre commentaire</button>
+        <button class="badge badge-danger" v-if="user.id === comments.userId">Supprimer votre commentaire</button>
+        <a class="badge badge-warning" v-if="currentArticle" :href="'/articles/' + currentArticle.id">Commenter un article</a>
       </div>
       <div v-else>
         <br />
@@ -149,7 +149,7 @@ export default {
       ArticleDataService.deleteComment(this.comments.id)
         .then(response => {
           console.log(response.data);
-          this.$router.push({ path: "/articles" });
+          this.$router.push({ path: "/add" });
         })
         .catch(e => {
           console.log(e);

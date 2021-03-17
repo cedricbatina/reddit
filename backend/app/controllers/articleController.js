@@ -175,14 +175,7 @@ exports.getOneArticle = (req, res, next) => {
   console.log(id);
   Article.findOne({
     where: { id: id },
-    include: {
-      Comment,
-      as: "Comments",
-      include: {
-        User,
-        as: "users",
-      },
-    },
+    include: ["Comments"],
   })
     //Article.findByPk(/*{ where: { id: id }, include: ["comments"] }*/)
     .then((data) => {
