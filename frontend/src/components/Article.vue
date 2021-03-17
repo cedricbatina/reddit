@@ -49,7 +49,7 @@
 
   <div v-else>
     <br />
-    <p>Cliquez sur un article!!!!!!!!!!!...</p>
+    <p>Cliquez sur un article !!!!...</p>
   </div>
 </template>
 
@@ -110,7 +110,7 @@ export default {
       ArticleDataService.deleteArticle(this.currentArticle.id)
         .then(response => {
           console.log(response.data);
-          this.$router.push({ name: "/articles" });
+          this.$router.push({ path: "/articles" });
         })
         .catch(e => {
           console.log(e);

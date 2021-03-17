@@ -1,5 +1,6 @@
 const Article = require("../models/index").article;
 const Comment = require("../models/index").comment;
+const User = require("../models/index").user;
 
 exports.findAll = (req, res) => {
   let title = req.body.title;
@@ -171,9 +172,22 @@ exports.deleteAll = (req, res, next) => {
 // endpoint to find article
 exports.getOneArticle = (req, res, next) => {
   const id = req.params.id;
-  const comment = req.params.comment;
   console.log(id);
-  Article.findOne({ where: { id: id }, include: ["comments"] })
+  Article.findOne({
+    where: { id: id },
+    include: [
+      {
+        model: Comment,
+        as: "Comments",
+        include: [
+          {
+            model: User.userName,
+            as: "users",
+          },
+        ],
+      },
+    ],
+  })
     //Article.findByPk(/*{ where: { id: id }, include: ["comments"] }*/)
     .then((data) => {
       res.send(data);
@@ -190,7 +204,7 @@ exports.getOneArticle = (req, res, next) => {
 
 // below go endpoints for comments
 exports.findCommentById = (id) => {
-  return Comment.findByPk(id, { include: ["article"] })
+  return Comment.findOne({ where: { id: id } }, { include: ["article"] })
     .then((comment) => {
       return comment;
     })
@@ -260,15 +274,5 @@ exports.deleteComment = (req, res) => {
         message:
           "Une erreur est survenue lors de la suppression du commentaire" + id,
       });
-    });
-};
-exports.getAllComments = (req, res) => {
-  let comment = req.body.text;
-  console.log(comment);
-  Comment.findAll()
-    .then((comments) => res.status(200).json({ comments }))
-    .catch((error) => {
-      console.log(error);
-      res.status(500).json({ error });
     });
 };

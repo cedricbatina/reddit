@@ -1,14 +1,15 @@
 <template>
   <div >
     <div class="col-md-6">
-      <div v-if="currentArticle" class="card">
-        <h4>Article</h4>
+      <!--<div v-if="currentArticle" class="card">-->
+      <div class="card">
         <div class="card-header">
           <h3><strong>Titre:</strong></h3> {{ currentArticle.title }}
         </div>
         <div class="card-body">
           <p><strong>Contenu:</strong></p> {{ currentArticle.content }}
         </div>
+      </div>
         <!--<div>
           <h3>Commentaires de l'article</h3>
           <ul class="list-group">
@@ -20,6 +21,7 @@
         </div>-->
 
         <div class="form-group">
+         <p> {{ comments.text }}</p>
         <label for="commentaire">Commentaire :</label>
         <input 
           type="text"
@@ -31,12 +33,12 @@
         />
       </div>
           <button @click="saveComment" class="btn btn-success">Commenter l'article</button>
-          <button v-if=" currentComment.userId === user.id " @click="deleteComment" class="btn btn-danger">Supprimer le commentaire
-    </div>
+          <button v-if=" currentComment.userId === user.id " @click="deleteComment" class="btn btn-danger">Supprimer le commentaire</button>
     <div v-else>
       <h4>Votre commentaire a été enregistré avec succès !!!</h4>
-      <button class="btn btn-success" @click="newComment">Ajouter</button>
+      <button class="btn btn-success" @click="newComment">Ajouter un nouveau commentaire</button>
     </div>
+
       </div>
   </div>
 </template>
@@ -83,7 +85,7 @@ export default {
           console.log(e);
         });
     } ,
-    newArticle() {
+    newComment() {
       this.submitted = false;
       this.comment = {};
     }

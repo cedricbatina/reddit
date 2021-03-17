@@ -43,7 +43,6 @@ export default {
         content: "",
         userId: "",
         published: false,
-        comments: []
       },
       submitted: false
     };

@@ -42,16 +42,11 @@
         <div>
           <label><strong>Status:</strong></label> {{ currentArticle.published ? "Publié" : "En attente" }}
         </div>
-        <div>
-          <h3>Commentaires de l'article</h3>
-          <ul class="list-group">
-            <li class="list-group-item" v-for="comment in comments" :key="comment.id"> {{ currentArticle.comments }} </li>
-            <button v-if="currentArticle.id === comments.articleId">Supprimer</button>
-          </ul>
-            <p> {{ currentArticle.comments }}</p>
+        <div >
+          <label ><strong>Commentaires:</strong></label> {{ this.currentArticle.comments }}
         </div>
-
         <div class="form-group">
+         <p> {{ comments.text }}</p>
         <label for="commentaire">Commentaire :</label>
         <input 
           type="text"
@@ -62,11 +57,13 @@
           v-model="comments.text"
         />
       </div>
-        <button class="badge badge-warning" @click="saveComment">Commenter</button>
-        <a class="badge badge-warning" v-if="currentArticle" :href="'/articles/' + currentArticle.id">Commenter un article</a>
         <a v-if=" currentArticle.userId === user.id " class="badge badge-warning"
           :href="'/articles/' + currentArticle.id"
-        >Editer</a>
+        >Modifier</a>
+        <button class="btn btn-warning" @click="saveComment">Commenter</button>
+        <button class="btn btn-danger" v-if="comments.userId === user.id" @click="deleteComment" >Supprimer votre commentaire</button>
+        <!--<button class="btn btn-danger" v-if="user.id === comments.id">Supprimer votre commentaire</button>
+        <a class="badge badge-warning" v-if="currentArticle" :href="'/articles/' + currentArticle.id">Commenter un article</a>-->
       </div>
       <div v-else>
         <br />
@@ -78,7 +75,6 @@
 
 <script>
 import ArticleDataService from "../services/ArticleDataService";
-//import CommentDataService from "../services/CommentDataService";
 export default {
   name: "ArticlesList",
   data() {
@@ -88,7 +84,7 @@ export default {
       currentIndex: -1,
       title: "",
       user: JSON.parse(localStorage.getItem('user')),
-      comments: []
+      comments: [],
   }
   },
   methods: {
@@ -133,40 +129,27 @@ export default {
         });
     },
     saveComment() {
-    let data = {
-      text: this.comments.text,
-      articleId : this.currentArticle.id,
-      userId : JSON.parse(localStorage.getItem("user")).id
-      }
-      //ArticleDataService.createComment(data) 
-       // console.log(data)
-      
-    ArticleDataService.createComment(data) 
-      .then(response => {
-        this.comments.id = response.data.id;
+      let data = {
+        text: this.comments.text,
+        articleId: this.currentArticle.id,
+        userId: JSON.parse(localStorage.getItem("user")).id,
+      };
+      ArticleDataService.createComment(data)
+        .then(response => {
+          this.comments.id = response.data.id;
           console.log(response.data);
-          //console.log(response);
-          //Comment.push(this.comments)
+          console.log(response);
+          this.submitted = true;
         })
         .catch(e => {
           console.log(e);
         });
-  },
-  deleteComment() {
-      ArticleDataService.deleteComment(this.currentComment.id)
+    },
+   deleteComment() {
+      ArticleDataService.deleteComment(this.comments.id)
         .then(response => {
           console.log(response.data);
-          this.$router.push({ name: "/articles" });
-        })
-        .catch(e => {
-          console.log(e);
-        });
-  },
-  retrieveComments() {
-      ArticleDataService.getAllComments()
-        .then(response => {
-          this.comments = response.data.comments;
-          console.log(response.data);
+          this.$router.push({ path: "/articles" });
         })
         .catch(e => {
           console.log(e);
@@ -175,7 +158,6 @@ export default {
   },
   mounted() {
     this.retrieveArticles();
-   // this.retrieveComments()
   }
 };
 </script>

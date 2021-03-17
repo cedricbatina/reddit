@@ -62,7 +62,7 @@ export const router = new Router({
       component: () => import("./components/AddArticle.vue"),
     },
     {
-      path: "/articles/:id",
+      path: "/addComment",
       name: "AddComment",
       component: () => import("./components/AddComment.vue"),
     },
