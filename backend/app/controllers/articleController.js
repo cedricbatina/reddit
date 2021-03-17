@@ -173,10 +173,7 @@ exports.deleteAll = (req, res, next) => {
 exports.getOneArticle = (req, res, next) => {
   const id = req.params.id;
   console.log(id);
-  Article.findOne({
-    where: { id: id },
-    include: ["Comments"],
-  })
+  Article.findOne({ where: { id: id }, include: ["comments"] })
     //Article.findByPk(/*{ where: { id: id }, include: ["comments"] }*/)
     .then((data) => {
       res.send(data);
