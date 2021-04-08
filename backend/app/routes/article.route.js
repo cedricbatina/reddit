@@ -19,4 +19,5 @@ module.exports = function (app) {
   app.post("/api/comments", articles.createComment);
   app.delete("/api/comments/:id", articles.deleteComment);
   app.get("/api/comments/:id", articles.findCommentById);
+  app.get("/api/comments/:id", articles.getAllComments);
 };

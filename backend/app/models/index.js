@@ -27,7 +27,6 @@ db.role = require("./role.model")(sequelize, Sequelize);
 db.user.hasMany(db.article, { as: "articles" });
 db.article.belongsTo(db.user, {
   foreignKey: "userId",
-  as: "users",
 });
 // one-to-many relationship. an article has many comments, and a comment belongs to only one article !!
 db.article.hasMany(db.comment, { as: "comments" });

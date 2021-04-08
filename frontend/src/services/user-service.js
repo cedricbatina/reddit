@@ -19,7 +19,7 @@ class UserService {
 
 /*const API_URL = "http://localhost:3000/api/";
 class UserService {
-  getPublicContent() {
+  getPublicContent() {/
     return axios.get(API_URL);
   }
   // add a HTTP header with the help of authHeader() function when requesting authorized resource.

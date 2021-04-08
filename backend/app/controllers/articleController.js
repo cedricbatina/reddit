@@ -1,12 +1,24 @@
+const Sequelize = require("sequelize");
 const Article = require("../models/index").article;
 const Comment = require("../models/index").comment;
-const User = require("../models/index").user.userName;
+const User = require("../models/index").user;
+
+/*exports.findAll = (req, res) => {
+  const article = Article.findAll({
+    attributes: ["id", "content", "created_at"],
+    include: [{ as: User, attributes: ["userName"] }],
+    order: Sequelize.literal("created_at DESC"),
+  });
+  console.log(article);
+  res.send(article);
+};*/
 
 exports.findAll = (req, res) => {
   let title = req.body.title;
   let condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
   console.log(Article);
-  return Article.findAll({ where: condition }, { include: ["comments"] })
+  return Article.findAll({ where: condition })
+
     .then((articles) => res.status(200).json({ articles }))
 
     .catch((error) => {
@@ -97,10 +109,6 @@ exports.createArticle = (req, res) => {
 // update article  endpoint
 exports.modifyArticle = (req, res) => {
   const id = req.params.id;
-  /* if (userRole != 2) {
-    res.status(404);
-  }*/
-
   Article.update(req.body, {
     where: { id: id },
   })
@@ -125,9 +133,6 @@ exports.modifyArticle = (req, res) => {
 };
 
 // updating endpoint ends here
-
-// I wanna set the router for likes and dislikes
-// adding like
 
 exports.deleteArticle = (req, res, next) => {
   const id = req.params.id;
@@ -172,12 +177,14 @@ exports.deleteAll = (req, res, next) => {
 // endpoint to find article
 exports.getOneArticle = (req, res, next) => {
   const id = req.params.id;
-  console.log(id);
-  Article.findOne({ where: { id: id }, include: ["comments"] })
+  Article.findOne({
+    where: { id: id },
+    include: ["comments"],
+  })
     //Article.findByPk(/*{ where: { id: id }, include: ["comments"] }*/)
     .then((data) => {
       res.send(data);
-      console.log(comment);
+      console.log("article", data);
     })
     .catch((err) => {
       console.log(err);
@@ -260,5 +267,15 @@ exports.deleteComment = (req, res) => {
         message:
           "Une erreur est survenue lors de la suppression du commentaire" + id,
       });
+    });
+};
+exports.getAllComments = (req, res) => {
+  let comment = req.body.text;
+  console.log(comment);
+  Comment.findAll()
+    .then((comments) => res.status(200).json({ comments }))
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ error });
     });
 };

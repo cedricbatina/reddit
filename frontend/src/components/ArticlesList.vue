@@ -1,7 +1,7 @@
 <template>
   <div class="list row">
-    <div class="col-md-8">
-      <div class="input-group mb-3">
+    <div class="col-md-12">
+      <div class="input-group">
         <input type="text" class="form-control" placeholder="Rechercher par titre"
           v-model="title"/>
         <div class="input-group-append">
@@ -26,7 +26,7 @@
         </li>
       </ul>
 
-      <!--<button v-if="currentArticle" class="m-3 btn btn-sm btn-danger" @click="removeAllArticles">
+      <!--<button v-if="currentArticle " class="m-3 btn btn-sm btn-danger" @click="removeAllArticles">
         Supprimer tous les articles
       </button>-->
     </div>
@@ -42,28 +42,36 @@
         <div>
           <label><strong>Status:</strong></label> {{ currentArticle.published ? "Publié" : "En attente" }}
         </div>
-        <div >
-          <label ><strong>Commentaires:</strong></label> {{ this.currentArticle.comments }}
-        </div>
-        <div class="form-group">
-         <p> {{ comments.text }}</p>
-        <label for="commentaire">Commentaire :</label>
-        <input 
-          type="text"
-          class="form-control"
-          id="commentaire"
-          required
-          name="content"
-          v-model="comments.text"
-        />
-      </div>
-        <a v-if=" currentArticle.userId === user.id " class="badge badge-warning"
+         <a v-if=" currentArticle.userId === user.id " class="badge badge-warning"
           :href="'/articles/' + currentArticle.id"
         >Modifier</a>
+        <div>
+          <h3>Nouveaux Commentaires</h3>
+        <ul class="list-group">
+          <li class="list-group-item" v-for="comment in comments" :key="comment">
+            {{ comment }}
+          </li>
+        </ul>
+        </div>
+        <div >
+          <p ><strong>Commentaires:</strong></p> {{ this.currentArticle.comments }}
+        </div>
+        <div class="submit-form">
+          <div v-if="!submitted">
+            <div class="form-group">
+            <label for="commentaire">Commentaire :</label>
+             <input type="text" class="form-control" id="commentaire" required name="content"
+          v-model="comments.text"/>
+          </div>
         <button class="badge badge-warning" @click="saveComment">Commenter</button>
-        <button class="badge badge-danger">Supprimer votre commentaire</button>
-        <button class="badge badge-danger" v-if="user.id === comments.userId">Supprimer votre commentaire</button>
-        <a class="badge badge-warning" v-if="currentArticle" :href="'/articles/' + currentArticle.id">Commenter un article</a>
+        </div>
+        <div v-else>
+      <h4>Votre commentaire a été enregistré avec succès !!!</h4>
+      <button class="btn btn-success" @click="newComment">Ajouter un autre commentaire</button>
+    </div>
+    
+    </div>
+        <button class="badge badge-danger" v-if="user.id === comments.userId" @click="deleteComment">Supprimer votre commentaire</button>
       </div>
       <div v-else>
         <br />
@@ -85,7 +93,9 @@ export default {
       title: "",
       user: JSON.parse(localStorage.getItem('user')),
       comments: [],
+      submitted: false
   }
+  
   },
   methods: {
     retrieveArticles() {
@@ -105,8 +115,10 @@ export default {
     },
     setActiveArticle(article, index) {
       this.currentArticle = article;
-      console.log(this.currentArticle, "test")
       this.currentIndex = index;
+      this.comments = []
+      console.log(this.currentArticle, "test")
+
     },
     /*removeAllArticles() {
       ArticleDataService.deleteAllArticles() 
@@ -140,10 +152,15 @@ export default {
           console.log(response.data);
           console.log(response);
           this.submitted = true;
+          
         })
         .catch(e => {
           console.log(e);
         });
+    },
+    newComment() {
+      this.submitted = false;
+      this.comments = [];
     },
    deleteComment() {
       ArticleDataService.deleteComment(this.comments.id)

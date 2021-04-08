@@ -3,7 +3,8 @@
     <header class="jumbotron">
       <h3>{{ content }}</h3>
     </header>
-    <div><h2>Bienvenue dans Reddit, le réseau social de l'entreprise Groupomania !!!</h2></div>
+    <div><h2>Bienvenue dans Reddit</h2><h3> le réseau social de l'entreprise Groupomania !!!</h3>
+    <p>Veuillez soit vous connecter ou vous inscrire</p></div>
   </div>
 </template>
 

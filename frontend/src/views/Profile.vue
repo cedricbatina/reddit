@@ -29,11 +29,6 @@ export default {
       return this.$store.state.auth.user;
     }
   },
-  mounted() {
-    if (!this.currentUser) {
-      this.$router.push('/login');
-    }
-  },
   methods: {
     suppressAccount () {
       userService.suppressUser(this.currentUser.id) 
@@ -42,6 +37,11 @@ export default {
       this.$store.dispatch('auth/logout');
 
     }
-  }
+  }, 
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push('/login');
+    }
+  },
 };
 </script>

@@ -27,7 +27,7 @@
     </div>
     <div v-else>
       <h4>Votre article a été enregistré avec succès !!!</h4>
-      <button class="btn btn-success" @click="newArticle">Ajouter</button>
+      <button class="btn btn-success" @click="newArticle">Ajouter un autre article</button>
     </div>
   </div>
 </template>

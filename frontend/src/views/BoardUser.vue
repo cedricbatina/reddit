@@ -3,6 +3,12 @@
     <header class="jumbotron">
       <h3>{{content}}</h3>
     </header>
+    <div class="row">
+      <div class="">
+        <div class="userArticles col-md-9"></div>
+        <div class="usersArray col-md-3"></div>
+      </div>
+    </div>
   </div>
 </template>
 
