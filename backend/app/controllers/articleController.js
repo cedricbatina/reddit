@@ -258,7 +258,7 @@ exports.deleteComment = (req, res) => {
         });
       } else {
         res.send({
-          message: `Impossible de supprimer le commentaire ${id}. Peut étre que l'article n'existe plus dans la base de données !!`,
+          message: `Impossible de supprimer le commentaire ${id}. Peut étre que le commentaire n'existe plus dans la base de données !!`,
         });
       }
     })

@@ -49,12 +49,12 @@
           <h3>Nouveaux Commentaires</h3>
         <ul class="list-group">
           <li class="list-group-item" v-for="comment in comments" :key="comment">
-            {{ comment }}
+            {{ comments.text }}<button @click="deleteComment" >Supprimer le commentaire</button>
           </li>
         </ul>
         </div>
         <div >
-          <p ><strong>Commentaires:</strong></p> {{ this.currentArticle.comments }}
+          <p ><strong>Commentaires:</strong></p> {{ comments.text }}
         </div>
         <div class="submit-form">
           <div v-if="!submitted">
@@ -116,7 +116,6 @@ export default {
     setActiveArticle(article, index) {
       this.currentArticle = article;
       this.currentIndex = index;
-      this.comments = []
       console.log(this.currentArticle, "test")
 
     },
@@ -152,6 +151,7 @@ export default {
           console.log(response.data);
           console.log(response);
           this.submitted = true;
+          this.comments.push(this.comment)
           
         })
         .catch(e => {
