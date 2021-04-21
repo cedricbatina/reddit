@@ -26,22 +26,6 @@ class ArticleDataService {
   deleteAllArticles() {
     return http.delete(`/articles`);
   }
-
-  findByTitle(title) {
-    return http.get(`/articles?title=${title}`);
-  }
-  getAllComments() {
-    return http.get("/comments");
-  }
-  getOneComment(id) {
-    return http.get(`/comments/${id}`);
-  }
-  deleteComment(id) {
-    return http.delete(`/comments/${id}`);
-  }
-  createComment(data) {
-    return http.post("/comments", data);
-  }
 }
 
 export default new ArticleDataService();

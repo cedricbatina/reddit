@@ -7,9 +7,8 @@
         class="profile-img-card"
       />
       <form name="form" @submit.prevent="handleLogin">
-       
-         <!--label for username-->
-          
+        <!--label for username-->
+
         <div class="form-group">
           <label for="userName">Pseudo :</label>
           <input
@@ -23,9 +22,11 @@
             v-if="errors.has('userName')"
             class="alert alert-danger"
             role="alert"
-          >Veuillez entrer votre pseudo!</div>
+          >
+            Veuillez entrer votre pseudo!
+          </div>
         </div>
-         <!--label for password-->
+        <!--label for password-->
         <div class="form-group">
           <label for="password">Password</label>
           <input
@@ -39,16 +40,23 @@
             v-if="errors.has('password')"
             class="alert alert-danger"
             role="alert"
-          >Veuillez entrer votre mot de passe!</div>
+          >
+            Veuillez entrer votre mot de passe!
+          </div>
         </div>
         <div class="form-group">
           <button class="btn btn-primary btn-block" :disabled="loading">
-            <span v-show="loading" class="spinner-border spinner-border-sm"></span>
+            <span
+              v-show="loading"
+              class="spinner-border spinner-border-sm"
+            ></span>
             <span>Login</span>
           </button>
         </div>
         <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">{{message}}</div>
+          <div v-if="message" class="alert alert-danger" role="alert">
+            {{ message }}
+          </div>
         </div>
       </form>
     </div>
@@ -56,43 +64,42 @@
 </template>
 
 <script>
-import User from '../models/user';
+import User from "../models/user";
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
-      user: new User('', ''),
+      user: new User("", ""),
       loading: false,
-      message: ''
+      message: "",
     };
   },
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
-    }
+    },
   },
   // checking if the user logged in status using Vuex Store: this.$store.state.auth.status.loggedIn. If the status is true, we use Vue Router to direct user to Profile Page
   created() {
     if (this.loggedIn) {
-      this.$router.push('/profile');
+      this.$router.push("/BoardUser");
     }
   },
   methods: {
     handleLogin() {
       this.loading = true;
-      this.$validator.validateAll()
-      .then(isValid => {
+      this.$validator.validateAll().then((isValid) => {
         if (!isValid) {
           this.loading = false;
           return;
         }
         if (this.user.userName && this.user.password) {
-          this.$store.dispatch('auth/login', this.user)
-          .then(() => {
-              this.$router.push('/profile');
+          this.$store.dispatch("auth/login", this.user).then(
+            () => {
+              this.$router.push("/profile");
             },
-            error => {
+            (error) => {
               this.loading = false;
               this.message =
                 (error.response && error.response.data) ||
@@ -102,8 +109,8 @@ export default {
           );
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

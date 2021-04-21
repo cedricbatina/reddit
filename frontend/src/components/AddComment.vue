@@ -1,95 +1,143 @@
 <template>
-  <div >
-    <div class="col-md-6">
-      <!--<div v-if="currentArticle" class="card">-->
-      <div class="card">
-        <div class="card-header">
-          <h3><strong>Titre:</strong></h3> {{ currentArticle.title }}
-        </div>
-        <div class="card-body">
-          <p><strong>Contenu:</strong></p> {{ currentArticle.content }}
-        </div>
-      </div>
-        <!--<div>
-          <h3>Commentaires de l'article</h3>
-          <ul class="list-group">
-            <li class="list-group-item" v-for="comment in comments" :key="comment.id"> {{ currentArticle.comments }} </li>
-            <button v-if="currentArticle.id === comments.articleId">Supprimer</button>
-          </ul>
-            <p> {{ currentArticle.comments }}</p>
-            </div>
-        </div>-->
-
-        <div class="form-group">
-         <p> {{ comments.text }}</p>
-        <label for="commentaire">Commentaire :</label>
-        <input 
-          type="text"
-          class="form-control"
-          id="commentaire"
-          required
-          name="content"
-          v-model="comments.text"
-        />
-      </div>
-          <button @click="saveComment" class="btn btn-success">Commenter l'article</button>
-          <button v-if=" currentComment.userId === user.id " @click="deleteComment" class="btn btn-danger">Supprimer le commentaire</button>
-    <div v-else>
-      <h4>Votre commentaire a été enregistré avec succès !!!</h4>
-      <button class="btn btn-success" @click="newComment">Ajouter un nouveau commentaire</button>
+  <div v-if="currentArticle" class="card col-lg-10">
+    <div class="card-header">
+      <h3><strong>Titre:</strong></h3>
+      {{ currentArticle.title }}
+      <p>
+        Cet article a été publié par
+        <strong>{{ currentArticle.userName }}</strong
+        >, le <strong>{{ currentArticle.createdAt }}</strong>
+      </p>
     </div>
 
+    <div class="card-body">
+      <p><strong>Contenu:</strong></p>
+      {{ currentArticle.content }}
+    </div>
+    <!--<div>
+      <h3>Nouveaux Commentaires</h3>
+      <ul class="list-group">
+        <li class="list-group-item" v-for="comment in comments" :key="comment">
+          {{ comments.text
+          }}<button @click="deleteComment">Supprimer le commentaire</button>
+        </li>
+      </ul>
+      <div>
+        <p><strong>Commentaires:</strong></p>
+        {{ comments.text }}
       </div>
+      <div class="submit-form">
+        <div v-if="!submitted">
+          <div class="form-group">
+            <label for="commentaire">Commentaire :</label>
+            <input
+              type="text"
+              class="form-control"
+              id="commentaire"
+              required
+              name="content"
+              v-model="comments.text"
+            />
+          </div>
+          <button class="badge badge-warning" @click="saveComment">
+            Commenter
+          </button>
+        </div>
+        <div v-else>
+          <h4>Votre commentaire a été enregistré avec succès !!!</h4>
+          <button class="btn btn-success" @click="newComment">
+            Ajouter un autre commentaire
+          </button>
+        </div>
+        <button
+          class="badge badge-danger"
+          v-if="user.id === comments.userId"
+          @click="deleteComment"
+        >
+          Supprimer votre commentaire
+        </button>
+      </div>
+    </div>-->
+  </div>
+
+  <div v-else>
+    <h4>Votre commentaire a été enregistré avec succès !!!</h4>
+    <button class="btn btn-success" @click="newComment">
+      Ajouter un nouveau commentaire
+    </button>
   </div>
 </template>
 <script>
+import CommentDataService from "../services/CommentDataService";
 import ArticleDataService from "../services/ArticleDataService";
 export default {
   name: "AddComment",
   data() {
     return {
-    comment: {
-        id: "",
-        text: "",
-        articleId: "",
-        userId: "",
-      },
-      submitted: false
+      currentArticle: "",
+      comments: [],
+      message: "",
+      articleComments: JSON.parse(localStorage.getItem("comments")),
+      //userComments: JSON.parse(localStorage.getItem("comments")),
+      submitted: true,
     };
   },
   methods: {
+    getArticle(id) {
+      ArticleDataService.getOneArticle(id).then((response) => {
+        this.currentArticle = this.response.data;
+        console.log(response.data);
+      });
+    },
+    retrieveOneArticleComments() {
+      if (this.articleComments.articleId === this.currentArticle.id) {
+        return CommentDataService.getAllComments().then((response) => {
+          this.comments = response.data.comments;
+          console.log(response.data, "comment");
+        });
+      } else {
+        this.comments = [];
+      }
+    },
     saveComment() {
       let data = {
         text: this.article.title,
         articleId: this.article.articleId,
         userId: JSON.parse(localStorage.getItem("user")).id,
+        userName: JSON.parse(localStorage.getItem("user")).userName,
       };
-      ArticleDataService.create(data)
-        .then(response => {
+      CommentDataService.create(data)
+        .then((response) => {
           this.comment.id = response.data.id;
+          this.message = "Votre commentaire a été bien crée !";
           console.log(response.data);
           console.log(response);
           this.submitted = true;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
-   deleteComment() {
-      ArticleDataService.deleteComment(this.currentComment.id)
-        .then(response => {
+    deleteComment() {
+      CommentDataService.deleteComment(this.comments.id)
+        .then((response) => {
           console.log(response.data);
           this.$router.push({ name: "/articles" });
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-    } ,
+    },
     newComment() {
       this.submitted = false;
       this.comment = {};
-    }
-  }
+    },
+  },
+  mounted() {
+    this.message = " ";
+    console.log(this.$route.params);
+    this.getArticle(this.$route.params.id);
+  },
 };
 </script>
 <style scoped>
@@ -109,5 +157,4 @@ export default {
   -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
 }
-
 </style>

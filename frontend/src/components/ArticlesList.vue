@@ -1,22 +1,10 @@
 <template>
   <div class="list row">
-    <div class="col-md-12">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Rechercher par titre"
-          v-model="title"/>
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button"
-            @click="searchTitle"
-          >
-            Search
-          </button>
-        </div>
-      </div>
-    </div>
     <div class="col-md-6">
       <h4>Liste des articles</h4>
       <ul class="list-group">
-        <li class="list-group-item"
+        <li
+          class="list-group-item"
           :class="{ active: index == currentIndex }"
           v-for="(article, index) in articles"
           :key="index"
@@ -39,39 +27,18 @@
         <div>
           <label><strong>Contenu:</strong></label> {{ currentArticle.content }}
         </div>
-        <div>
-          <label><strong>Status:</strong></label> {{ currentArticle.published ? "Publié" : "En attente" }}
-        </div>
-         <a v-if=" currentArticle.userId === user.id " class="badge badge-warning"
+        <a
+          v-if="currentArticle.userId === user.id"
+          class="badge badge-warning"
           :href="'/articles/' + currentArticle.id"
-        >Modifier</a>
-        <div>
-          <h3>Nouveaux Commentaires</h3>
-        <ul class="list-group">
-          <li class="list-group-item" v-for="comment in comments" :key="comment">
-            {{ comments.text }}<button @click="deleteComment" >Supprimer le commentaire</button>
-          </li>
-        </ul>
-        </div>
-        <div >
-          <p ><strong>Commentaires:</strong></p> {{ comments.text }}
-        </div>
-        <div class="submit-form">
-          <div v-if="!submitted">
-            <div class="form-group">
-            <label for="commentaire">Commentaire :</label>
-             <input type="text" class="form-control" id="commentaire" required name="content"
-          v-model="comments.text"/>
-          </div>
-        <button class="badge badge-warning" @click="saveComment">Commenter</button>
-        </div>
-        <div v-else>
-      <h4>Votre commentaire a été enregistré avec succès !!!</h4>
-      <button class="btn btn-success" @click="newComment">Ajouter un autre commentaire</button>
-    </div>
-    
-    </div>
-        <button class="badge badge-danger" v-if="user.id === comments.userId" @click="deleteComment">Supprimer votre commentaire</button>
+          >Modifier</a
+        >
+        <button @click="goAndComment" class="badge badge-warning">
+          Ajouter un commentaire
+        </button>
+        <a class="badge badge-warning" :href="'/articles/' + currentArticle"
+          >Commenter</a
+        >
       </div>
       <div v-else>
         <br />
@@ -91,20 +58,20 @@ export default {
       currentArticle: null,
       currentIndex: -1,
       title: "",
-      user: JSON.parse(localStorage.getItem('user')),
+      user: JSON.parse(localStorage.getItem("user")),
       comments: [],
-      submitted: false
-  }
-  
+      submitted: false,
+      commentaires: JSON.parse(localStorage.getItem("comments")),
+    };
   },
   methods: {
     retrieveArticles() {
       ArticleDataService.getAllArticles()
-        .then(response => {
+        .then((response) => {
           this.articles = response.data.articles;
           console.log(response.data, "article");
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
@@ -116,8 +83,7 @@ export default {
     setActiveArticle(article, index) {
       this.currentArticle = article;
       this.currentIndex = index;
-      console.log(this.currentArticle, "test")
-
+      console.log(this.currentArticle, "test");
     },
     /*removeAllArticles() {
       ArticleDataService.deleteAllArticles() 
@@ -129,56 +95,18 @@ export default {
           console.log(e);
         });
     },*/
-    searchTitle() {
-      ArticleDataService.findByTitle(this.title)
-        .then(response => {
-          this.article = response.data;
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
+    goAndComment() {
+      this.$router.push({
+        path: "/addComment",
+      });
     },
-    saveComment() {
-      let data = {
-        text: this.comments.text,
-        articleId: this.currentArticle.id,
-        userId: JSON.parse(localStorage.getItem("user")).id,
-      };
-      ArticleDataService.createComment(data)
-        .then(response => {
-          this.comments.id = response.data.id;
-          console.log(response.data);
-          console.log(response);
-          this.submitted = true;
-          this.comments.push(this.comment)
-          
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-    newComment() {
-      this.submitted = false;
-      this.comments = [];
-    },
-   deleteComment() {
-      ArticleDataService.deleteComment(this.comments.id)
-        .then(response => {
-          console.log(response.data);
-          this.$router.push({ path: "/add" });
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    }
   },
   mounted() {
     this.retrieveArticles();
-  }
+  },
 };
-</script>
-<style>
+</script >
+<style scoped>
 .list {
   text-align: left;
   max-width: 750px;

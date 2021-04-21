@@ -1,5 +1,6 @@
 //const articles = require("../controllers/article.controller");
 const articles = require("../controllers/articleController");
+const comments = require("../controllers/commentController");
 const allRights = require("../middleware/authJwt");
 
 module.exports = function (app) {
@@ -14,10 +15,6 @@ module.exports = function (app) {
   //app.get("/api/articles", articles.findAllPublished);
   app.delete("/api/articles/:id", articles.deleteArticle);
   //app.delete("/api/articles/:id", articles.delete);
-  app.delete("/api/articles/", articles.deleteAll);
+  // app.delete("/api/articles/", articles.deleteAll);
   //app.delete("/api/articles/", articles.deleteAll);
-  app.post("/api/comments", articles.createComment);
-  app.delete("/api/comments/:id", articles.deleteComment);
-  app.get("/api/comments/:id", articles.findCommentById);
-  app.get("/api/comments/:id", articles.getAllComments);
 };

@@ -12,9 +12,8 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       foreignKey: true,
     },
-    published: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
+    userName: {
+      type: Sequelize.STRING(35),
     },
   });
   return Article;

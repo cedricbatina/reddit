@@ -1,0 +1,85 @@
+const Article = require("../models/index").article;
+const Comment = require("../models/index").comment;
+const User = require("../models/index").user;
+
+// below go endpoints for comments
+exports.getOneComment = (req, res) => {
+  const id = req.params.id;
+  Comment.findOne({
+    where: { id: id },
+    include: ["articles"],
+  })
+    .then((data) => {
+      res.send(data);
+      console.log("comment", data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.end();
+      res.status(500).send({
+        message:
+          "Une erreur est parvenue en voulant accéder au commentaire " + id,
+      });
+    });
+};
+exports.createComment = (req, res) => {
+  console.log(req.body);
+  //const userId = localStorage.getItem("user").id;
+  if (!req.body.text) {
+    res.status(400).send({
+      message: "Le texte ne peut être vide !!!",
+    });
+    return;
+  }
+  const comment = {
+    text: req.body.text,
+    articleId: req.body.articleId,
+    userId: req.body.userId,
+    userName: req.body.userName,
+  };
+  Comment.create(comment)
+    .then(
+      (comment) => console.log(comment),
+
+      res.status(201).json({
+        message: " Votre commentaire a bien été ajouté !!!",
+      })
+    )
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: "il y a une erreur", error });
+    });
+};
+exports.deleteComment = (req, res) => {
+  const id = req.params.id;
+  Comment.destroy({
+    where: { id: id },
+  })
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Votre commentaire a bien été supprimé !!!",
+        });
+      } else {
+        res.send({
+          message: `Impossible de supprimer le commentaire ${id}. Peut étre que le commentaire n'existe plus dans la base de données !!`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          "Une erreur est survenue lors de la suppression du commentaire" + id,
+      });
+    });
+};
+exports.getAllComments = (req, res) => {
+  let comment = req.body.text;
+  console.log(comment);
+  Comment.findAll()
+    .then((comments) => res.status(200).json({ comments }))
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ error });
+    });
+};

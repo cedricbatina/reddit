@@ -12,6 +12,9 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       foreignKey: true,
     },
+    userName: {
+      type: Sequelize.STRING(35),
+    },
   });
   return Comment;
 };

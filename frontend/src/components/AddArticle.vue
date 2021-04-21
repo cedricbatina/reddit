@@ -4,7 +4,7 @@
       <div class="form-group">
         <label for="title">Titre de l'article :</label>
         <input
-          type="text"
+          type="textarea" maxlength="120"
           class="form-control"
           id="title"
           required
@@ -15,7 +15,7 @@
       <div class="form-group">
         <label for="content">Contenu de l'article :</label>
         <input 
-          type="text"
+          type="textarea" maxlength="120" 
           class="form-control"
           id="description"
           required
@@ -42,10 +42,10 @@ export default {
         title: "",
         content: "",
         userId: "",
-        published: false,
-      },
-      submitted: false
-    };
+        userName: ""
+        },
+        submitted: false
+    }
   },
   methods: {
     saveArticle() {
@@ -53,7 +53,7 @@ export default {
         title: this.article.title,
         content: this.article.content,
         userId: JSON.parse(localStorage.getItem("user")).id,
-        published: this.article.published
+        userName: JSON.parse(localStorage.getItem("user")).userName,
       };
       ArticleDataService.create(data)
         .then(response => {
@@ -73,9 +73,9 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .submit-form {
-  max-width: 300px;
+  max-width: 500px;
   margin: auto;
 }
 </style>

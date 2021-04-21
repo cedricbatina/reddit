@@ -30,10 +30,7 @@ db.article.belongsTo(db.user, {
 });
 // one-to-many relationship. an article has many comments, and a comment belongs to only one article !!
 db.article.hasMany(db.comment, { as: "comments" });
-db.comment.belongsTo(db.article, {
-  foreignKey: "articleId",
-  as: "article",
-});
+db.comment.belongsTo(db.article, { foreignKey: "articleId", as: "article" });
 // I've added this one-to-many relationship between user and comments, in order to figure out issues 05-03-2021
 db.user.hasMany(db.comment, { as: "comments" });
 db.comment.belongsTo(db.user, {

@@ -14,11 +14,7 @@
           v-model="currentArticle.content"
         />
       </div>
-
-      <div class="form-group">
-        <label><strong>Status:</strong></label>
-        {{ currentArticle.published ? "Publié" : "En attente" }}
-      </div>
+    
     </form>
 
     <button class="badge badge-primary mr-2"
@@ -27,12 +23,7 @@
     >
       Retirer l'article
     </button>
-    <button v-else class="badge badge-primary mr-2"
-      @click="updatePublished(true)"
-    >
-      Publier
-    </button>
-
+    
     <button class="badge badge-danger mr-2"
       @click="deleteArticle"
     >
@@ -75,26 +66,6 @@ export default {
           console.log(e);
         });
     },
-
-    updatePublished(status) {
-      let data = {
-        id: this.currentArticle.id,
-        title: this.currentArticle.title,
-        content: this.currentArticle.content,
-        userId: this.currentArticle.userId,
-        published: status
-      };
-
-      ArticleDataService.updateArticle(this.currentArticle.id, data)
-        .then(response => {
-          this.currentArticle.published = status;
-          console.log(response.data);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-
     updateArticle() {
       ArticleDataService.updateArticle(this.currentArticle.id, this.currentArticle)
         .then(response => {
@@ -125,9 +96,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .edit-form {
-  max-width: 300px;
+  max-width: 500px;
   margin: auto;
 }
 </style>

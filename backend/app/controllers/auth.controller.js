@@ -56,6 +56,7 @@ exports.login = (req, res, next) => {
     where: {
       userName: req.body.userName,
     },
+    include: ["articles"],
   })
     .then((user) => {
       if (!user) {
@@ -93,15 +94,15 @@ exports.login = (req, res, next) => {
     });
 };
 exports.suppressAccount = (req, res, next) => {
-  User.destroy({ where: { id: req.params.id } });
-  /*.then(() => {
+  User.destroy({ where: { id: req.params.id } })
+    .then(() => {
       res.status(200).send("Compte supprimé.");
     })
     .catch((err) => {
       res.status(500).send({
         message: "Une erreur est survenue lors de la suppression de l'article",
       });
-    });*/
+    });
 };
 
 /*exports.signup = (req, res, next) => {
