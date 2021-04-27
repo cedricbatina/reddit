@@ -8,7 +8,7 @@
           :class="{ active: index == currentIndex }"
           v-for="(article, index) in articles"
           :key="index"
-          @click="setActiveArticle(article, index)"
+          @click="getOneArticle(id)"
         >
           {{ article.title }}
         </li>
@@ -85,6 +85,18 @@ export default {
       this.currentIndex = index;
       console.log(this.currentArticle, "test");
     },
+    getArticle(id, index) {
+      ArticleDataService.getOneArticle(id)
+        .then((response) => {
+          this.currentArticle = response.data;
+          this.currentIndex = index;
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
     /*removeAllArticles() {
       ArticleDataService.deleteAllArticles() 
         .then(response => {
@@ -94,12 +106,12 @@ export default {
         .catch(e => {
           console.log(e);
         });
-    },*/
+    },
     goAndComment() {
       this.$router.push({
         path: "/addComment",
       });
-    },
+    }*/
   },
   mounted() {
     this.retrieveArticles();

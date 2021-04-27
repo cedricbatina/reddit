@@ -16,6 +16,20 @@ exports.findAll = (req, res) => {
       res.status(500).json({ error });
     });
 };
+exports.findAllArticlesByUser = (req, res) => {
+  let userId = req.body.userId;
+  let id = User.id;
+  console.log(id, userId);
+  return Article.findAll({ where: userId === id }).then((articles) =>
+    res
+      .status(200)
+      .json({ articles })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error });
+      })
+  );
+};
 
 exports.createOneArticle = (req, res) => {
   if (!req.body.title) {
