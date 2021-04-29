@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentArticle" class="card col-lg-10">
+  <div v-if="currentArticle" class="card">
     <div class="card-header">
       <h3><strong>Titre:</strong></h3>
       {{ currentArticle.title }}
@@ -77,8 +77,6 @@ export default {
       currentArticle: "",
       comments: [],
       message: "",
-      articleComments: JSON.parse(localStorage.getItem("comments")),
-      //userComments: JSON.parse(localStorage.getItem("comments")),
       submitted: true,
     };
   },
@@ -88,16 +86,6 @@ export default {
         this.currentArticle = this.response.data;
         console.log(response.data);
       });
-    },
-    retrieveOneArticleComments() {
-      if (this.articleComments.articleId === this.currentArticle.id) {
-        return CommentDataService.getAllComments().then((response) => {
-          this.comments = response.data.comments;
-          console.log(response.data, "comment");
-        });
-      } else {
-        this.comments = [];
-      }
     },
     saveComment() {
       let data = {
@@ -134,9 +122,10 @@ export default {
     },
   },
   mounted() {
+    this.getArticle(this.$route.params.id);
+
     this.message = " ";
     console.log(this.$route.params);
-    this.getArticle(this.$route.params.id);
   },
 };
 </script>

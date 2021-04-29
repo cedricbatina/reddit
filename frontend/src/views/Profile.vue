@@ -20,10 +20,7 @@
         </div>
         <div class="card-footer">
           <p>(Attention!!! Cette action est irréversible)</p>
-          <button
-            class="badge badge-danger"
-            v-on:click="setSuppressionMessage(message)"
-          >
+          <button class="badge badge-danger" v-on:click="suppressAccount">
             Supprimer le compte
           </button>
         </div>
@@ -31,7 +28,15 @@
       <div class="col-8">
         <h3>Listes de vos articles</h3>
         <ul class="list-group">
-          <li v-for="article in articles" :key="article"></li>
+          <li
+            class="list-group-item"
+            :class="{ active: index == currentIndex }"
+            v-for="(article, index) in articles"
+            :key="index"
+            @click="getArticle(article.id)"
+          >
+            {{ article.title }}
+          </li>
         </ul>
       </div>
     </div>
@@ -48,16 +53,20 @@ import userService from "../services/user-service";
 import ArticleDataService from "../services/ArticleDataService";
 export default {
   name: "Profile",
-  data() {
-    return {
-      message: "",
-      articles: [],
-    };
-  },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
     },
+  },
+  data() {
+    return {
+      articles: [],
+      currentArticle: null,
+      currentIndex: -1,
+      title: "",
+      user: JSON.parse(localStorage.getItem("user")),
+      submitted: false,
+    };
   },
   methods: {
     getAllarticlesByUser() {
@@ -66,23 +75,40 @@ export default {
         console.log(response.data, "article");
       });
     },
+    refreshList() {
+      this.retrieveArticles();
+      this.currentArticle = null;
+      this.currentIndex = -1;
+    },
+    /*
+    setActiveArticle(article, index) {
+      this.currentArticle = article;
+      this.currentIndex = index;
+      console.log(this.currentArticle, "test");
+    },*/
+    getArticle(id, index) {
+      ArticleDataService.getOneArticle(id)
+        .then((response) => {
+          this.currentArticle = response.data;
+          this.currentIndex = index;
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     suppressAccount() {
       userService.suppressUser(this.currentUser.id);
       console.log(this.currentUser);
       this.$router.push("/register");
       this.$store.dispatch("auth/logout");
     },
-    setSuppressionMessage() {
-      this.message = "Voulez-vous réellement supprimer votre compte?";
-    },
   },
   mounted() {
     if (!this.currentUser) {
       this.$router.push("/login");
-    } else {
-      this.message = "";
-      //this.getAllArticlesByUser();
     }
+    this.getAllarticlesByUser();
   },
 };
 </script>

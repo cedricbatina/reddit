@@ -8,9 +8,12 @@
           :class="{ active: index == currentIndex }"
           v-for="(article, index) in articles"
           :key="index"
-          @click="getArticle(id)"
+          @click="getArticle(article.id, index)"
         >
-          {{ article.title }}
+          {{ article.title }}, Auteur : {{ article.user.userName }}, ({{
+            article.comments.length
+          }}
+          commentaires)
         </li>
       </ul>
 
@@ -33,10 +36,10 @@
           :href="'/articles/' + currentArticle.id"
           >Modifier</a
         >
-        <button @click="goAndComment" class="badge badge-warning">
+        <button @click="goAndComment()" class="badge badge-warning">
           Ajouter un commentaire
         </button>
-        <a class="badge badge-warning" :href="'/articles/' + currentArticle"
+        <a class="badge badge-warning" :href="'/articles/' + currentArticle.id"
           >Commenter</a
         >
       </div>
@@ -85,8 +88,8 @@ export default {
       this.currentIndex = index;
       console.log(this.currentArticle, "test");
     },*/,
-    getArticle(id) {
-      ArticleDataService.getOneArticle(id)
+    getArticle(id, index) {
+      ArticleDataService.getOneArticle(id, index)
         .then((response) => {
           this.currentArticle = response.data;
           console.log(response.data);
@@ -105,12 +108,12 @@ export default {
         .catch(e => {
           console.log(e);
         });
-    },
+    },*/
     goAndComment() {
       this.$router.push({
         path: "/addComment",
       });
-    }*/
+    },
   },
   mounted() {
     this.retrieveArticles();

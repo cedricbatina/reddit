@@ -4,11 +4,26 @@ const Comment = require("../models/index").comment;
 const User = require("../models/index").user;
 
 exports.findAll = (req, res) => {
-  let title = req.body.title;
+  let title = req.query.title;
   let condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-  console.log(Article);
-  return Article.findAll({ where: condition })
-
+  console.log(condition);
+  console.log(title);
+  return Article.findAll({
+    include: [
+      {
+        model: User,
+        as: "user",
+        attributes: ["userName"],
+      },
+      {
+        model: Comment,
+        as: "comments",
+        attributes: ["id"],
+      },
+    ],
+    attributes: ["id", "title"],
+    where: condition,
+  })
     .then((articles) => res.status(200).json({ articles }))
 
     .catch((error) => {
@@ -20,7 +35,7 @@ exports.findAllArticlesByUser = (req, res) => {
   let userId = req.body.userId;
   let id = User.id;
   console.log(id, userId);
-  return Article.findAll({ where: userId === id }).then((articles) =>
+  return Article.findAll({ where: { userId: id } }).then((articles) =>
     res
       .status(200)
       .json({ articles })
@@ -144,8 +159,25 @@ exports.deleteArticle = (req, res, next) => {
 exports.getOneArticle = (req, res, next) => {
   const id = req.params.id;
   Article.findOne({
-    where: { id: id },
-    include: ["comments"],
+    include: [
+      {
+        model: User,
+        as: "user",
+        attributes: ["userName"],
+      },
+      {
+        model: Comment,
+        as: "comments",
+        include: [
+          {
+            model: User,
+            as: "user",
+            attributes: ["userName"],
+          },
+        ],
+      },
+    ],
+    where: { id: req.params.id },
   })
     .then((data) => {
       res.send(data);

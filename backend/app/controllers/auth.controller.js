@@ -94,13 +94,13 @@ exports.login = (req, res, next) => {
     });
 };
 exports.suppressAccount = (req, res, next) => {
-  User.destroy({ where: { id: req.params.id } })
+  User.delete({ where: { id: req.params.id } })
     .then(() => {
       res.status(200).send("Compte supprimé.");
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Une erreur est survenue lors de la suppression de l'article",
+        message: err.message,
       });
     });
 };

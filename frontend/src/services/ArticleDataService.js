@@ -6,7 +6,7 @@ class ArticleDataService {
     return http.get("/articles");
   }
   getArticlesByUser() {
-    return http.get("articles");
+    return http.get("/articles");
   }
 
   getOneArticle(id) {
