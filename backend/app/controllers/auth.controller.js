@@ -1,6 +1,7 @@
 const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
+const Article = db.article;
 const Role = db.role;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -56,7 +57,6 @@ exports.login = (req, res, next) => {
     where: {
       userName: req.body.userName,
     },
-    include: ["articles"],
   })
     .then((user) => {
       if (!user) {

@@ -29,9 +29,9 @@
                 >Administrateur</router-link
               >
             </li>
-            <li v-if="currentUser" class="nav-item">
+            <!--<li v-if="currentUser" class="nav-item">
               <router-link to="/user" class="nav-link">Utilisateur</router-link>
-            </li>
+            </li>-->
             <li class="nav-item">
               <router-link class="nav-link" to="/articles"
                 >Liste des articles</router-link

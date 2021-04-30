@@ -12,6 +12,7 @@ class UserService {
   getAdminBoard() {
     return http.get("/admin", { headers: authHeader() });
   }
+
   suppressUser(id) {
     return http.delete("/user/" + id, { headers: authHeader() });
   }

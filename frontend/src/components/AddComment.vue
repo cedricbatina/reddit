@@ -58,6 +58,13 @@
         </button>
       </div>
     </div>-->
+    <div v-if="currentArticle.comments.length > 0">
+      <label><strong>Commentaires:</strong></label>
+      <div v-for="(comment, index) in currentArticle.comments" :key="index">
+        {{ comment.text }} (par {{ comment.user.userName }})
+      </div>
+    </div>
+    <div v-else>Soyez le premier à commenter cet article</div>
   </div>
 
   <div v-else>
@@ -74,7 +81,7 @@ export default {
   name: "AddComment",
   data() {
     return {
-      currentArticle: "",
+      currentArticle: null,
       comments: [],
       message: "",
       submitted: true,
@@ -123,9 +130,7 @@ export default {
   },
   mounted() {
     this.getArticle(this.$route.params.id);
-
-    this.message = " ";
-    console.log(this.$route.params);
+    console.log(this.$route.params.id);
   },
 };
 </script>

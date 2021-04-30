@@ -30,6 +30,12 @@
         <div>
           <label><strong>Contenu:</strong></label> {{ currentArticle.content }}
         </div>
+        <div v-if="currentArticle.comments.length > 0">
+          <label><strong>Commentaires:</strong></label>
+          <div v-for="(comment, index) in currentArticle.comments" :key="index">
+            {{ comment.text }} (par {{ comment.user.userName }})
+          </div>
+        </div>
         <a
           v-if="currentArticle.userId === user.id"
           class="badge badge-warning"
@@ -94,8 +100,8 @@ export default {
           this.currentArticle = response.data;
           console.log(response.data);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          console.log(error);
         });
     },
 
@@ -111,7 +117,7 @@ export default {
     },*/
     goAndComment() {
       this.$router.push({
-        path: "/addComment",
+        path: "/articles/" + this.currentArticle.id,
       });
     },
   },

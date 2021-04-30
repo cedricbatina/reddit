@@ -25,17 +25,27 @@
           </button>
         </div>
       </div>
-      <div class="col-8">
-        <h3>Listes de vos articles</h3>
+      <div class="col-8 card">
+        <h3 class="card-header">Listes de vos articles</h3>
+        <ul>
+          <li v-for="ownArticle in ownArticles" :key="ownArticle">
+            {{ article.title }}
+            {{ article.content }}
+          </li>
+        </ul>
+
         <ul class="list-group">
           <li
-            class="list-group-item"
-            :class="{ active: index == currentIndex }"
             v-for="(article, index) in articles"
             :key="index"
             @click="getArticle(article.id)"
+            class="list-group-item"
+            :class="{ active: index == currentIndex }"
           >
-            {{ article.title }}
+            <strong>{{ article.title }} </strong>, ({{
+              article.comments.length
+            }}
+            "commentair(e)s")
           </li>
         </ul>
       </div>
@@ -61,10 +71,12 @@ export default {
   data() {
     return {
       articles: [],
+      ownArticles: [],
       currentArticle: null,
       currentIndex: -1,
       title: "",
       user: JSON.parse(localStorage.getItem("user")),
+      article: JSON.parse(localStorage.getItem("article")),
       submitted: false,
     };
   },
@@ -72,6 +84,7 @@ export default {
     getAllarticlesByUser() {
       ArticleDataService.getArticlesByUser().then((response) => {
         this.articles = response.data.articles;
+
         console.log(response.data, "article");
       });
     },
@@ -80,12 +93,12 @@ export default {
       this.currentArticle = null;
       this.currentIndex = -1;
     },
-    /*
+
     setActiveArticle(article, index) {
       this.currentArticle = article;
       this.currentIndex = index;
       console.log(this.currentArticle, "test");
-    },*/
+    },
     getArticle(id, index) {
       ArticleDataService.getOneArticle(id)
         .then((response) => {

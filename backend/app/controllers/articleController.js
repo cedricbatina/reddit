@@ -2,19 +2,16 @@ const Sequelize = require("sequelize");
 const Article = require("../models/index").article;
 const Comment = require("../models/index").comment;
 const User = require("../models/index").user;
+//const user = JSON.parse(localStorage.getItem("user"));
 
 exports.findAll = (req, res) => {
   let title = req.query.title;
-  let condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-  console.log(condition);
+  // let condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  //console.log(condition);
   console.log(title);
   return Article.findAll({
     include: [
-      {
-        model: User,
-        as: "user",
-        attributes: ["userName"],
-      },
+      { model: User, as: "user", attributes: ["userName"] },
       {
         model: Comment,
         as: "comments",
@@ -22,15 +19,34 @@ exports.findAll = (req, res) => {
       },
     ],
     attributes: ["id", "title"],
-    where: condition,
+    //where: condition,
   })
     .then((articles) => res.status(200).json({ articles }))
 
     .catch((error) => {
       console.log(error);
-      res.status(500).json({ error });
+      res.status(400).json({ error });
     });
 };
+exports.userArticlesOnly = (req, res) => {
+  let id = user.id;
+  let userId = req.body.userId;
+  let condition = userId === id;
+  if (!condition) {
+    return res.status(501).send({
+      message:
+        "Vous n'avez pas d'articles. Veuillez en ajouter un, en cliquant sur le lien 'Ajouter un article' !!! ",
+    });
+  } else {
+    Article.findAll({ where: { id: userId } })
+      .then((articles) => res.send(201).json({ articles }))
+      .catch((error) => {
+        console.log(error);
+        res.status(404).json({ error });
+      });
+  }
+};
+
 exports.findAllArticlesByUser = (req, res) => {
   let userId = req.body.userId;
   let id = User.id;
