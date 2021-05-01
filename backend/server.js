@@ -3,9 +3,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 //const userRoutes = require("../backend/app/routes/user.route");
-const articleRoutes = require("../backend/app/routes/article.route");
+//const articleRoutes = require("../backend/app/routes/article.route");
 //const authRoutes = require("./app/routes/auth.route");
-const cors = require("cors");
+//const cors = require("cors");
 const app = express();
 
 app.use((req, res, next) => {
@@ -71,10 +71,10 @@ function initial() {
 }
 */
 // set  routes
-
-require("./app/routes/article.route")(app);
-require("./app/routes/auth.route")(app);
 require("./app/routes/user.route")(app);
+require("./app/routes/auth.route")(app);
+require("./app/routes/article.route")(app);
+require("./app/routes/comment.route")(app);
 //app.use("/api/articles", articleRoutes);
 //require("./app/routes/comment.route")(app);
 //app.use("/api/users", userRoutes);

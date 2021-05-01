@@ -12,11 +12,8 @@
         <p>Commentaires de l'article:</p>
         <ol class="list-group">
           <li v-for="(comment, index) in currentArticle.comments" :key="index">
-            {{ comment.text }} (par {{ comment.user.userName }})<button
-              v-if="comment.userId === user.id"
-              @click="deleteArticle"
-              class="btn btn-warning"
-            >
+            {{ comment.text }} (par {{ comment.user.userName }})
+            <button @click="deleteComment" class="btn btn-warning card">
               Supprimer
             </button>
           </li>
@@ -30,78 +27,78 @@
       <br />
       <p>Cliquez sur un article !!!!...</p>
     </div>
-    <div v-if="currentArticle" class="col-5">
-      <h4>Article</h4>
-      <form class="edit-form card">
-        <div class="form-group">
-          <label for="title">Titre</label>
-          <input
-            type="text"
-            class="form-control"
-            id="title"
-            v-model="currentArticle.title"
-          />
+    <div class="col-5">
+      <div class="card">
+        <p><strong>Ajouter un commentaire:</strong> {{ comments.text }}</p>
+        <div class="submit-form card mt-3">
+          <div v-if="!submitted">
+            <div class="form-group">
+              <label for="commentaire">Commentaire :</label>
+              <input
+                type="text"
+                class="form-control"
+                id="commentaire"
+                required
+                name="content"
+                v-model="comments.text"
+              />
+            </div>
+            <button class="badge badge-warning" @click="saveComment">
+              Commenter
+            </button>
+          </div>
+          <div v-else>
+            <h4>Votre commentaire a été enregistré avec succès !!!</h4>
+            <button class="btn btn-success" @click="newComment">
+              Ajouter un autre commentaire
+            </button>
+          </div>
         </div>
-        <div class="form-group card">
-          <label for="description">Contenu</label>
-          <input
-            type="text"
-            class="form-control"
-            id="description"
-            v-model="currentArticle.content"
-          />
-        </div>
-      </form>
-      <button class="badge badge-danger mr-2" @click="deleteComment">
-        Supprimer
-      </button>
-
-      <button type="submit" class="badge badge-success" @click="updateArticle">
-        Mettre à jour
-      </button>
-      <ul class="list-group">
-        <li class="list-group-item" v-for="comment in comments" :key="comment">
-          {{ comments.text
-          }}<button @click="deleteComment">Supprimer le commentaire</button>
-        </li>
-      </ul>
-      <div>
-        <p><strong>Commentaires:</strong></p>
-        {{ comments.text }}
       </div>
-      <div class="submit-form card mt-3">
-        <div v-if="!submitted">
+      <div v-if="currentArticle" class="card mt-5">
+        <h4>Editer votre article</h4>
+        <form v-if="currentArticle.userId === user.id" class="edit-form card">
           <div class="form-group">
-            <label for="commentaire">Commentaire :</label>
+            <label for="title">Titre</label>
             <input
               type="text"
               class="form-control"
-              id="commentaire"
-              required
-              name="content"
-              v-model="comments.text"
+              id="title"
+              v-model="currentArticle.title"
             />
           </div>
-          <button class="badge badge-warning" @click="saveComment">
-            Commenter
-          </button>
-        </div>
-        <div v-else>
-          <h4>Votre commentaire a été enregistré avec succès !!!</h4>
-          <button class="btn btn-success" @click="newComment">
-            Ajouter un autre commentaire
-          </button>
-        </div>
-        <button
-          class="badge badge-danger"
-          v-if="user.id === comments.userId"
-          @click="deleteComment"
-        >
-          Supprimer votre commentaire
+          <div class="form-group card">
+            <label for="description">Contenu</label>
+            <input
+              type="text"
+              class="form-control"
+              id="description"
+              v-model="currentArticle.content"
+            />
+          </div>
+        </form>
+        <button class="badge badge-danger mr-2" @click="deleteComment">
+          Supprimer
         </button>
+
+        <button
+          type="submit"
+          class="badge badge-success"
+          @click="updateArticle"
+        >
+          Mettre à jour
+        </button>
+        <!--<ul class="list-group">
+        <li class="list-group-item" v-for="comment in comments" :key="comment">
+          {{ comments.text
+          }}<button @click="deleteComment" class="btn btn-danger">
+            Supprimer le commentaire
+          </button>
+        </li>
+      </ul>-->
       </div>
+      <p>{{ message }}</p>
     </div>
-    <p>{{ message }}</p>
   </div>
 </template>
 
@@ -113,17 +110,18 @@ export default {
   name: "Article",
   data() {
     return {
+      currentArticle: null,
+      message: "",
+      comments: [],
+      owner: "",
       comment: {
         id: "",
         text: "",
         articleId: "",
         userId: "",
       },
-      currentArticle: null,
-      message: "",
-      comments: [],
-      user: JSON.parse(localStorage.getItem("user")),
       submitted: false,
+      user: "",
     };
   },
   methods: {
@@ -131,11 +129,17 @@ export default {
       ArticleDataService.getOneArticle(id)
         .then((response) => {
           this.currentArticle = response.data;
+          this.owner = this.currentArticle.userId;
           console.log(response.data);
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    refreshPage(id) {
+      this.getArticle(id);
+      this.currentArticle = null;
+      this.currentIndex = -1;
     },
     updateArticle() {
       ArticleDataService.updateArticle(
@@ -155,7 +159,8 @@ export default {
       ArticleDataService.deleteArticle(this.currentArticle.id)
         .then((response) => {
           console.log(response.data);
-          this.$router.push({ path: "/articles" });
+          this.refreshPage();
+          // this.$router.push({ path: "/articles" });
         })
         .catch((e) => {
           console.log(e);
@@ -175,10 +180,15 @@ export default {
           console.log(response.data);
           console.log(response);
           this.submitted = true;
+          this.comments.unshift(this.comment);
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    newComment() {
+      this.submitted = false;
+      this.article = {};
     },
     deleteComment() {
       CommentDataService.deleteComment(this.comments.id)

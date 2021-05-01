@@ -3,11 +3,29 @@ const Comment = require("../models/index").comment;
 const User = require("../models/index").user;
 
 // below go endpoints for comments
-exports.getOneComment = (req, res) => {
+
+exports.getOneComment = (req, res, next) => {
   const id = req.params.id;
   Comment.findOne({
-    where: { id: id },
-    include: ["articles"],
+    include: [
+      {
+        model: User,
+        as: "user",
+        attributes: ["userName"],
+      },
+      {
+        model: Article,
+        as: "articles",
+        include: [
+          {
+            model: User,
+            as: "user",
+            attributes: ["userName"],
+          },
+        ],
+      },
+    ],
+    where: { id: req.params.id },
   })
     .then((data) => {
       res.send(data);
@@ -22,6 +40,7 @@ exports.getOneComment = (req, res) => {
       });
     });
 };
+
 exports.createComment = (req, res) => {
   console.log(req.body);
   //const userId = localStorage.getItem("user").id;
@@ -47,7 +66,7 @@ exports.createComment = (req, res) => {
     )
     .catch((error) => {
       console.log(error);
-      res.status(500).json({ message: "il y a une erreur", error });
+      res.status(400).json({ message: "il y a une erreur", error });
     });
 };
 exports.deleteComment = (req, res) => {
@@ -74,9 +93,19 @@ exports.deleteComment = (req, res) => {
     });
 };
 exports.getAllComments = (req, res) => {
-  let comment = req.body.text;
-  console.log(comment);
-  Comment.findAll()
+  let text = req.query.text;
+  console.log(text);
+  Comment.findAll({
+    include: [
+      { model: User, as: "user", attributes: ["userName"] },
+      /*{
+        model: Article,
+        as: "articles",
+        attributes: ["id"],
+      },*/
+    ],
+    attributes: ["id", "text"],
+  })
     .then((comments) => res.status(200).json({ comments }))
     .catch((error) => {
       console.log(error);
