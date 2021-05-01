@@ -2,18 +2,22 @@
   <div class="row">
     <div v-if="currentArticle" class="card col-7">
       <div class="card-header">
-        <h3>Titre: {{ currentArticle.title }}</h3>
+        <h4>{{ currentArticle.title }}</h4>
       </div>
       <div class="card-body">
         <p>Auteur: {{ currentArticle.userName }}</p>
         <p>Contenu: {{ currentArticle.content }}</p>
       </div>
-      <div v-if="currentArticle.comments.length > 0" class="card-footer ml-4">
+      <div v-if="currentArticle.comments.length > 0" class="ml-3">
         <p>Commentaires de l'article:</p>
         <ol class="list-group">
           <li v-for="(comment, index) in currentArticle.comments" :key="index">
             {{ comment.text }} (par {{ comment.user.userName }})
-            <button @click="deleteComment" class="btn btn-warning card">
+            <button
+              v-if="comment.userId === user.id"
+              @click="deleteComment"
+              class="btn btn-warning card"
+            >
               Supprimer
             </button>
           </li>
@@ -27,9 +31,9 @@
       <br />
       <p>Cliquez sur un article !!!!...</p>
     </div>
-    <div class="col-5">
+    <div v-if="currentArticle" class="col-5">
       <div class="card">
-        <p><strong>Ajouter un commentaire:</strong> {{ comments.text }}</p>
+        <h4>Ajouter un commentaire: {{ comments.text }}</h4>
         <div class="submit-form card mt-3">
           <div v-if="!submitted">
             <div class="form-group">
@@ -48,16 +52,16 @@
             </button>
           </div>
           <div v-else>
-            <h4>Votre commentaire a été enregistré avec succès !!!</h4>
+            <h5>Votre commentaire a été enregistré avec succès !!!</h5>
             <button class="btn btn-success" @click="newComment">
               Ajouter un autre commentaire
             </button>
           </div>
         </div>
       </div>
-      <div v-if="currentArticle" class="card mt-5">
+      <div v-if="currentArticle.userId === owner" class="card mt-5">
         <h4>Editer votre article</h4>
-        <form v-if="currentArticle.userId === user.id" class="edit-form card">
+        <form class="edit-form card">
           <div class="form-group">
             <label for="title">Titre</label>
             <input
@@ -129,7 +133,7 @@ export default {
       ArticleDataService.getOneArticle(id)
         .then((response) => {
           this.currentArticle = response.data;
-          this.owner = this.currentArticle.userId;
+          this.owner = JSON.parse(localStorage.getItem("user")).id;
           console.log(response.data);
         })
         .catch((e) => {
