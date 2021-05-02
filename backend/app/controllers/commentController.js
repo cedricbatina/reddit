@@ -13,17 +13,6 @@ exports.getOneComment = (req, res, next) => {
         as: "user",
         attributes: ["userName"],
       },
-      {
-        model: Article,
-        as: "articles",
-        include: [
-          {
-            model: User,
-            as: "user",
-            attributes: ["userName"],
-          },
-        ],
-      },
     ],
     where: { id: req.params.id },
   })

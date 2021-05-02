@@ -5,18 +5,24 @@
         <h4>{{ currentArticle.title }}</h4>
       </div>
       <div class="card-body">
-        <p>Auteur: {{ currentArticle.userName }}</p>
-        <p>Contenu: {{ currentArticle.content }}</p>
+        <p>
+          <em
+            >Auteur: <strong>{{ currentArticle.userName }}</strong></em
+          >
+        </p>
+        <p><strong>Contenu: </strong> {{ currentArticle.content }}</p>
       </div>
       <div v-if="currentArticle.comments.length > 0" class="ml-3">
         <p>Commentaires de l'article:</p>
         <ol class="list-group">
           <li v-for="(comment, index) in currentArticle.comments" :key="index">
-            {{ comment.text }} (par {{ comment.user.userName }})
+            {{ comment.text }} (par {{ comment.user.userName }})<br />
             <button
-              v-if="comment.userId === user.id"
+              v-if="
+                comment.userId === user.id || currentArticle.userId === user.id
+              "
               @click="deleteComment"
-              class="btn btn-warning card"
+              class="badge badge-danger"
             >
               Supprimer
             </button>
@@ -33,7 +39,8 @@
     </div>
     <div v-if="currentArticle" class="col-5">
       <div class="card">
-        <h4>Ajouter un commentaire: {{ comments.text }}</h4>
+        <h4>Ajouter un commentaire:</h4>
+        <p>{{ comments.text }}</p>
         <div class="submit-form card mt-3">
           <div v-if="!submitted">
             <div class="form-group">
@@ -59,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div v-if="currentArticle.userId === owner" class="card mt-5">
+      <div v-if="currentArticle.userId === user.id" class="card mt-5">
         <h4>Editer votre article</h4>
         <form class="edit-form card">
           <div class="form-group">
@@ -81,16 +88,16 @@
             />
           </div>
         </form>
-        <button class="badge badge-danger mr-2" @click="deleteComment">
+        <button class="badge badge-danger mr-5 ml-5" @click="deleteArticle">
           Supprimer
         </button>
 
         <button
           type="submit"
-          class="badge badge-success"
+          class="badge badge-success mr-5 ml-5"
           @click="updateArticle"
         >
-          Mettre à jour
+          Modifier
         </button>
         <!--<ul class="list-group">
         <li class="list-group-item" v-for="comment in comments" :key="comment">
@@ -115,17 +122,19 @@ export default {
   data() {
     return {
       currentArticle: null,
+      currentComment: null,
       message: "",
       comments: [],
-      owner: "",
+      owner: JSON.parse(localStorage.getItem("user")),
       comment: {
         id: "",
         text: "",
         articleId: "",
         userId: "",
+        userName: "",
       },
       submitted: false,
-      user: "",
+      user: JSON.parse(localStorage.getItem("user")),
     };
   },
   methods: {
@@ -133,7 +142,6 @@ export default {
       ArticleDataService.getOneArticle(id)
         .then((response) => {
           this.currentArticle = response.data;
-          this.owner = JSON.parse(localStorage.getItem("user")).id;
           console.log(response.data);
         })
         .catch((e) => {
@@ -163,8 +171,9 @@ export default {
       ArticleDataService.deleteArticle(this.currentArticle.id)
         .then((response) => {
           console.log(response.data);
-          this.refreshPage();
-          // this.$router.push({ path: "/articles" });
+          //this.refreshPage();
+          this.user = JSON.parse(localStorage.getItem("comments")).id;
+          this.$router.push({ path: "/articles" });
         })
         .catch((e) => {
           console.log(e);
@@ -183,8 +192,8 @@ export default {
           this.message = "Votre commentaire a été bien crée !";
           console.log(response.data);
           console.log(response);
+          this.comments.push(this.comment);
           this.submitted = true;
-          this.comments.unshift(this.comment);
         })
         .catch((error) => {
           console.log(error);
@@ -192,13 +201,12 @@ export default {
     },
     newComment() {
       this.submitted = false;
-      this.article = {};
+      this.comment = {};
     },
     deleteComment() {
       CommentDataService.deleteComment(this.comments.id)
         .then((response) => {
           console.log(response.data);
-          this.$router.push({ name: "/articles/" + this.currentArticle.id });
         })
         .catch((e) => {
           console.log(e);
