@@ -99,16 +99,7 @@
         >
           Modifier
         </button>
-        <!--<ul class="list-group">
-        <li class="list-group-item" v-for="comment in comments" :key="comment">
-          {{ comments.text
-          }}<button @click="deleteComment" class="btn btn-danger">
-            Supprimer le commentaire
-          </button>
-        </li>
-      </ul>-->
       </div>
-      <p>{{ message }}</p>
     </div>
   </div>
 </template>
@@ -123,7 +114,6 @@ export default {
     return {
       currentArticle: null,
       currentComment: null,
-      message: "",
       comments: [],
       owner: JSON.parse(localStorage.getItem("user")),
       comment: {
@@ -148,10 +138,12 @@ export default {
           console.log(e);
         });
     },
-    refreshPage(id) {
-      this.getArticle(id);
-      this.currentArticle = null;
-      this.currentIndex = -1;
+    refreshPage() {
+      // this.getArticle(id);
+      this.getArticle(this.$route.params.id);
+
+      //this.currentArticle = null;
+      //this.currentIndex = -1;
     },
     updateArticle() {
       ArticleDataService.updateArticle(
@@ -189,11 +181,12 @@ export default {
       CommentDataService.createComment(data)
         .then((response) => {
           this.comment.id = response.data.id;
-          this.message = "Votre commentaire a été bien crée !";
           console.log(response.data);
           console.log(response);
           this.comments.push(this.comment);
           this.submitted = true;
+          this.refreshPage();
+          //this.getArticle(this.$route.params.id);
         })
         .catch((error) => {
           console.log(error);
