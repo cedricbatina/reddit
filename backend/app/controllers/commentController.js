@@ -58,8 +58,8 @@ exports.createComment = (req, res) => {
       res.status(400).json({ message: "il y a une erreur", error });
     });
 };
-exports.deleteComment = (req, res) => {
-  const id = req.params.id;
+exports.deleteComment = (req, res, next) => {
+  let id = req.params.id;
   Comment.destroy({
     where: { id: id },
   })

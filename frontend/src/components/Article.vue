@@ -7,21 +7,27 @@
       <div class="card-body">
         <p>
           <em
-            >Auteur: <strong>{{ currentArticle.userName }}</strong></em
+            ><strong>Auteur: {{ currentArticle.userName }}</strong></em
           >
         </p>
-        <p><strong>Contenu: </strong> {{ currentArticle.content }}</p>
+        <p>
+          <em><strong>Contenu: </strong></em> {{ currentArticle.content }}
+        </p>
       </div>
       <div v-if="currentArticle.comments.length > 0" class="ml-3">
         <p>Commentaires de l'article:</p>
         <ol class="list-group">
-          <li v-for="(comment, index) in currentArticle.comments" :key="index">
+          <li
+            v-for="(comment, index) in currentArticle.comments"
+            :key="index"
+            @click="getComment(comment.id, index)"
+          >
             {{ comment.text }} (par {{ comment.user.userName }})<br />
             <button
               v-if="
                 comment.userId === user.id || currentArticle.userId === user.id
               "
-              @click="deleteComment"
+              @click="deleteComment(comment.id, index)"
               class="badge badge-danger"
             >
               Supprimer
@@ -164,7 +170,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           //this.refreshPage();
-          this.user = JSON.parse(localStorage.getItem("comments")).id;
+          //this.user = JSON.parse(localStorage.getItem("comments")).id;
           this.$router.push({ path: "/articles" });
         })
         .catch((e) => {
@@ -185,8 +191,8 @@ export default {
           console.log(response);
           this.comments.push(this.comment);
           this.submitted = true;
-          this.refreshPage();
-          //this.getArticle(this.$route.params.id);
+          //this.refreshPage();
+          this.getArticle(this.$route.params.id);
         })
         .catch((error) => {
           console.log(error);
@@ -196,10 +202,21 @@ export default {
       this.submitted = false;
       this.comment = {};
     },
+    getComment(id) {
+      CommentDataService.getOneComment(id)
+        .then((response) => {
+          this.currentComment = response.data;
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     deleteComment() {
-      CommentDataService.deleteComment(this.comments.id)
+      CommentDataService.deleteComment(this.currentComment.id)
         .then((response) => {
           console.log(response.data);
+          this.comments.splice(this.currentComment.id);
           this.getArticle(this.$route.params.id);
         })
         .catch((e) => {

@@ -42,12 +42,9 @@
           :href="'/articles/' + currentArticle.id"
           >Modifier</a
         >
-        <button @click="goAndComment()" class="badge badge-warning">
-          Ajouter un commentaire
+        <button @click="goAndComment()" class="badge badge-warning ml-5">
+          Commenter
         </button>
-        <a class="badge badge-warning" :href="'/articles/' + currentArticle.id"
-          >Commenter</a
-        >
       </div>
       <div v-else>
         <br />
