@@ -200,6 +200,7 @@ export default {
       CommentDataService.deleteComment(this.comments.id)
         .then((response) => {
           console.log(response.data);
+          this.getArticle(this.$route.params.id);
         })
         .catch((e) => {
           console.log(e);

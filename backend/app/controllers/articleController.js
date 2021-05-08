@@ -28,61 +28,7 @@ exports.findAll = (req, res) => {
       res.status(400).json({ error });
     });
 };
-exports.userArticlesOnly = (req, res) => {
-  let id = user.id;
-  let userId = req.body.userId;
-  let condition = userId === id;
-  if (!condition) {
-    return res.status(501).send({
-      message:
-        "Vous n'avez pas d'articles. Veuillez en ajouter un, en cliquant sur le lien 'Ajouter un article' !!! ",
-    });
-  } else {
-    Article.findAll({ where: { id: userId } })
-      .then((articles) => res.send(201).json({ articles }))
-      .catch((error) => {
-        console.log(error);
-        res.status(404).json({ error });
-      });
-  }
-};
 
-exports.findAllArticlesByUser = (req, res) => {
-  let userId = req.body.userId;
-  let id = User.id;
-  console.log(id, userId);
-  return Article.findAll({ where: { userId: id } }).then((articles) =>
-    res
-      .status(200)
-      .json({ articles })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({ error });
-      })
-  );
-};
-
-exports.createOneArticle = (req, res) => {
-  if (!req.body.title) {
-    res.status(402).send({ message: "Le titre ne peut être vide" });
-    return;
-  }
-  if (!req.body.content) {
-    res.status(403).send({ message: "Le contenu ne peut être vide" });
-    return;
-  }
-  let article = req.body;
-
-  return Article.create(article)
-
-    .then((article) => {
-      res.status(201).json({ message: "Votre article a été crée: " });
-    })
-
-    .catch((err) => {
-      console.log(">> Error while creating article: ", err);
-    });
-};
 exports.createArticle = (req, res) => {
   console.log(req.body);
   if (!req.body.title) {
@@ -163,6 +109,7 @@ exports.deleteArticle = (req, res, next) => {
       }
     })
     .catch((err) => {
+      console.log(err);
       res.status(500).send({
         message:
           "Une erreur est survenue lors de la suppression de l'article" + id,

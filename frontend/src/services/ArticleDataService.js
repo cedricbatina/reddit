@@ -5,9 +5,6 @@ class ArticleDataService {
   getAllArticles() {
     return http.get("/articles");
   }
-  getArticlesByUser() {
-    return http.get("/articles");
-  }
 
   getOneArticle(id) {
     console.log(id);

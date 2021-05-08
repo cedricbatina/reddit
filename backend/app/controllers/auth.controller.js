@@ -94,7 +94,7 @@ exports.login = (req, res, next) => {
     });
 };
 exports.suppressAccount = (req, res, next) => {
-  User.delete({ where: { id: req.params.id } })
+  User.destroy({ where: { id: req.params.id } })
     .then(() => {
       res.status(200).send("Compte supprimé.");
     })

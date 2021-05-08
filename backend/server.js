@@ -75,6 +75,7 @@ require("./app/routes/user.route")(app);
 require("./app/routes/auth.route")(app);
 require("./app/routes/article.route")(app);
 require("./app/routes/comment.route")(app);
+require("./app/routes/userArticle.route")(app);
 //app.use("/api/articles", articleRoutes);
 //require("./app/routes/comment.route")(app);
 //app.use("/api/users", userRoutes);

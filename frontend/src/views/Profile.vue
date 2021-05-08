@@ -27,12 +27,12 @@
       </div>
       <div class="col-8 card">
         <h3 class="card-header">Listes de vos articles</h3>
-        <ul>
+        <!--<ul>
           <li v-for="ownArticle in ownArticles" :key="ownArticle">
             {{ article.title }}
             {{ article.content }}
           </li>
-        </ul>
+        </ul>-->
 
         <ul class="list-group">
           <li
@@ -42,12 +42,17 @@
             class="list-group-item"
             :class="{ active: index == currentIndex }"
           >
-            <strong>{{ article.title }} </strong>, ({{
-              article.comments.length
-            }}
-            "commentair(e)s")
+            <strong>{{ article.title }}</strong
+            >, ({{ article.comments.length }}
+            commentair(e)s)
           </li>
         </ul>
+      </div>
+    </div>
+    <div class="row">
+      <label><strong>Vos articles:</strong></label>
+      <div v-for="(article, index) in articles" :key="index">
+        {{ article.title }}
       </div>
     </div>
 
@@ -60,6 +65,7 @@
 
 <script>
 import userService from "../services/user-service";
+import UserArticleDataService from "../services/UserArticleDataService";
 import ArticleDataService from "../services/ArticleDataService";
 export default {
   name: "Profile",
@@ -71,19 +77,19 @@ export default {
   data() {
     return {
       articles: [],
-      ownArticles: [],
       currentArticle: null,
       currentIndex: -1,
       title: "",
       user: JSON.parse(localStorage.getItem("user")),
-      article: JSON.parse(localStorage.getItem("article")),
       submitted: false,
+      //userId: "",
     };
   },
   methods: {
-    getAllarticlesByUser() {
-      ArticleDataService.getArticlesByUser().then((response) => {
+    getAllarticlesByUser(userId) {
+      UserArticleDataService.getArticlesByUser(userId).then((response) => {
         this.articles = response.data.articles;
+        //this.userId = this.currentUser.id;
 
         console.log(response.data, "article");
       });
@@ -120,8 +126,9 @@ export default {
   mounted() {
     if (!this.currentUser) {
       this.$router.push("/login");
+    } else {
+      this.getAllarticlesByUser(this.currentUser.id);
     }
-    this.getAllarticlesByUser();
   },
 };
 </script>

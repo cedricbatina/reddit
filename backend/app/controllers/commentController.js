@@ -101,3 +101,19 @@ exports.getAllComments = (req, res) => {
       res.status(500).json({ error });
     });
 };
+//// GOING TO BED I WILL CONTINUE TOMORROW. AM WORKING IN PROGRESS
+
+exports.deleteComm = (req, res, next) => {
+  const id = req.params.id;
+  Comment.findOne({ where: { id: id } })
+    .then(() => {
+      Comment.destroy({ where: { id: req.params.id } })
+        .then(() =>
+          res
+            .status(201)
+            .json({ message: " Le commentaire a bien été supprimé !" })
+        )
+        .catch((error) => res.status(400).json({ error }));
+    })
+    .catch((error) => res.status(500).json({ error }));
+};
