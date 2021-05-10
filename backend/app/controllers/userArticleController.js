@@ -23,14 +23,12 @@ exports.findAllArticlesByUser = (req, res, next) => {
     attributes: ["id", "title"],
     //where: condition,
   })
-    .then(
-      (articles) => console.log(articles),
-      res.status(200) /*.json({ articles })*/
-    )
-
+    .then((articles) => {
+      console.log(articles), res.status(200).json({ articles });
+    })
     .catch(
       (error) => console.log(error)
 
-      //res.status(500).json({ message: "Il y a une erreur" })
+      // res.status(500).json({ message: "Il y a une erreur" })
     );
 };

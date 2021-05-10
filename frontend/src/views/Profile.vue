@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="col-8 card">
-        <h3 class="card-header">Listes de vos articles</h3>
+        <h3 class="card-header">Vos articles</h3>
         <!--<ul>
           <li v-for="ownArticle in ownArticles" :key="ownArticle">
             {{ article.title }}
@@ -47,12 +47,6 @@
             commentair(e)s)
           </li>
         </ul>
-      </div>
-    </div>
-    <div class="row">
-      <label><strong>Vos articles:</strong></label>
-      <div v-for="(article, index) in articles" :key="index">
-        {{ article.title }}
       </div>
     </div>
 
@@ -93,11 +87,6 @@ export default {
 
         console.log(response.data, "article");
       });
-    },
-    refreshList() {
-      this.retrieveArticles();
-      this.currentArticle = null;
-      this.currentIndex = -1;
     },
 
     setActiveArticle(article, index) {

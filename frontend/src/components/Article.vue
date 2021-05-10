@@ -93,18 +93,21 @@
               v-model="currentArticle.content"
             />
           </div>
-        </form>
-        <button class="badge badge-danger mr-5 ml-5" @click="deleteArticle">
-          Supprimer
-        </button>
+          <button
+            class="badge badge-danger mr-5 ml-5 col-6"
+            @click="deleteArticle"
+          >
+            Supprimer
+          </button>
 
-        <button
-          type="submit"
-          class="badge badge-success mr-5 ml-5"
-          @click="updateArticle"
-        >
-          Modifier
-        </button>
+          <button
+            type="submit"
+            class="badge badge-success mr-5 ml-5 col-6"
+            @click="updateArticle"
+          >
+            Modifier
+          </button>
+        </form>
       </div>
     </div>
   </div>
@@ -121,7 +124,7 @@ export default {
       currentArticle: null,
       currentComment: null,
       comments: [],
-      owner: JSON.parse(localStorage.getItem("user")),
+      //owner: JSON.parse(localStorage.getItem("user")),
       comment: {
         id: "",
         text: "",
