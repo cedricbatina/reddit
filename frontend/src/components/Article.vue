@@ -98,13 +98,24 @@
               v-model="currentArticle.content"
             />
           </div>
+<<<<<<< HEAD
           <button class="btn btn-danger mr-5 ml-5 col-6" @click="deleteArticle">
+=======
+          <button
+            class="badge badge-danger mr-5 ml-5 col-6"
+            @click="deleteArticle"
+          >
+>>>>>>> 2c479d8b45d43cc18cf8a12128da25fb14fb5040
             Supprimer
           </button>
 
           <button
             type="submit"
+<<<<<<< HEAD
             class="btn btn-success mr-5 ml-5 col-6"
+=======
+            class="badge badge-success mr-5 ml-5 col-6"
+>>>>>>> 2c479d8b45d43cc18cf8a12128da25fb14fb5040
             @click="updateArticle"
           >
             Modifier

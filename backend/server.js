@@ -45,23 +45,38 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require("./app/models");
 const Role = db.role;
 
+<<<<<<< HEAD
 /*db.sequelize.sync().then(() => {
   //roleFunction();
 });*/
+=======
+db.sequelize.sync().then(() => {
+  roleFunction();
+});
+>>>>>>> 2c479d8b45d43cc18cf8a12128da25fb14fb5040
 
 /*db.sequelize.sync().then(() => {
   console.log("Drop and re-sync db.");
   //initial();
+<<<<<<< HEAD
 });*/
 
 db.sequelize.sync({ force: false }).then(() => {
   initial();
+=======
+});
+>>>>>>> 2c479d8b45d43cc18cf8a12128da25fb14fb5040
 
   console.log("Drop and re-sync db.");
+<<<<<<< HEAD
 });
 
+=======
+  initial();
+});*/
+>>>>>>> 2c479d8b45d43cc18cf8a12128da25fb14fb5040
 // global function goes here
-function initial() {
+function roleFunction() {
   // create a simple user's role
   Role.create({
     id: 1,
@@ -73,6 +88,10 @@ function initial() {
     name: "admin",
   });
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2c479d8b45d43cc18cf8a12128da25fb14fb5040
 // set  routes
 require("./app/routes/user.route")(app);
 require("./app/routes/auth.route")(app);

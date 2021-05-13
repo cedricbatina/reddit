@@ -31,8 +31,13 @@
           </button>
         </div>
       </div>
+<<<<<<< HEAD
       <div class="col-8">
         <h3 class="card-header">Mes articles</h3>
+=======
+      <div class="col-8 card">
+        <h3 class="card-header">Vos articles</h3>
+>>>>>>> 2c479d8b45d43cc18cf8a12128da25fb14fb5040
         <!--<ul>
           <li v-for="ownArticle in ownArticles" :key="ownArticle">
             {{ article.title }}
