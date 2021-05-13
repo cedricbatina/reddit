@@ -58,29 +58,7 @@ exports.createComment = (req, res) => {
       res.status(400).json({ message: "il y a une erreur", error });
     });
 };
-exports.deleteComment = (req, res, next) => {
-  let id = req.params.id;
-  Comment.destroy({
-    where: { id: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Votre commentaire a bien été supprimé !!!",
-        });
-      } else {
-        res.send({
-          message: `Impossible de supprimer le commentaire ${id}. Peut étre que le commentaire n'existe plus dans la base de données !!`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          "Une erreur est survenue lors de la suppression du commentaire" + id,
-      });
-    });
-};
+
 exports.getAllComments = (req, res) => {
   let text = req.query.text;
   console.log(text);
@@ -103,7 +81,7 @@ exports.getAllComments = (req, res) => {
 };
 //// GOING TO BED I WILL CONTINUE TOMORROW. AM WORKING IN PROGRESS
 
-exports.deleteComm = (req, res, next) => {
+exports.deleteComment = (req, res, next) => {
   const id = req.params.id;
   Comment.findOne({ where: { id: id } })
     .then(() => {

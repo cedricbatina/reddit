@@ -1,5 +1,3 @@
-//const authCtrl = require("../controllers/auth.controller");
-
 const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/auth.controller");
 
@@ -11,7 +9,6 @@ module.exports = function (app) {
     );
     next();
   });
-
   app.post(
     "/api/auth/signup",
     [verifySignUp.noDuplication, verifySignUp.daRole],
@@ -19,4 +16,5 @@ module.exports = function (app) {
   );
   app.post("/api/auth/login", controller.login);
   app.delete("/api/user/:id", controller.suppressAccount);
+  app.get("/api/users", controller.findAllUsers);
 };

@@ -12,13 +12,10 @@ exports.findAll = (req, res) => {
   return Article.findAll({
     include: [
       { model: User, as: "user", attributes: ["userName"] },
-      {
-        model: Comment,
-        as: "comments",
-        attributes: ["id"],
-      },
+      { model: Comment, as: "comments", attributes: ["id"] },
     ],
     attributes: ["id", "title"],
+    order: [["createdAt", "DESC"]],
     //where: condition,
   })
     .then((articles) => res.status(200).json({ articles }))
@@ -154,6 +151,7 @@ exports.getOneArticle = (req, res, next) => {
       });
     });
 };
+// am not yet using this deleteAll method, but maybe i could call on the BoardAdmin.vue. we gonna see
 /*
 exports.deleteAll = (req, res, next) => {
   Article.destroy({

@@ -25,10 +25,12 @@
             {{ comment.text }} (par {{ comment.user.userName }})<br />
             <button
               v-if="
-                comment.userId === user.id || currentArticle.userId === user.id
+                comment.userId === user.id ||
+                currentArticle.userId === user.id ||
+                user.id === 1
               "
-              @click="deleteComment(comment.id, index)"
-              class="badge badge-danger"
+              @click="deleteComment(comment.id)"
+              class="btn btn-danger"
             >
               Supprimer
             </button>
@@ -46,7 +48,7 @@
     <div v-if="currentArticle" class="col-5">
       <div class="card">
         <h4>Ajouter un commentaire:</h4>
-        <p>{{ comments.text }}</p>
+        <p>{{ comment.text }}</p>
         <div class="submit-form card mt-3">
           <div v-if="!submitted">
             <div class="form-group">
@@ -57,10 +59,10 @@
                 id="commentaire"
                 required
                 name="content"
-                v-model="comments.text"
+                v-model="comment.text"
               />
             </div>
-            <button class="badge badge-warning" @click="saveComment">
+            <button class="btn btn-success" @click="saveComment">
               Commenter
             </button>
           </div>
@@ -72,7 +74,10 @@
           </div>
         </div>
       </div>
-      <div v-if="currentArticle.userId === user.id" class="card mt-5">
+      <div
+        v-if="currentArticle.userId === user.id || user.id === 1"
+        class="card mt-5"
+      >
         <h4>Editer votre article</h4>
         <form class="edit-form card">
           <div class="form-group">
@@ -93,18 +98,18 @@
               v-model="currentArticle.content"
             />
           </div>
-        </form>
-        <button class="badge badge-danger mr-5 ml-5" @click="deleteArticle">
-          Supprimer
-        </button>
+          <button class="btn btn-danger mr-5 ml-5 col-6" @click="deleteArticle">
+            Supprimer
+          </button>
 
-        <button
-          type="submit"
-          class="badge badge-success mr-5 ml-5"
-          @click="updateArticle"
-        >
-          Modifier
-        </button>
+          <button
+            type="submit"
+            class="btn btn-success mr-5 ml-5 col-6"
+            @click="updateArticle"
+          >
+            Modifier
+          </button>
+        </form>
       </div>
     </div>
   </div>
@@ -119,9 +124,9 @@ export default {
   data() {
     return {
       currentArticle: null,
-      currentComment: null,
+      //currentComment: null,
       comments: [],
-      owner: JSON.parse(localStorage.getItem("user")),
+      //owner: JSON.parse(localStorage.getItem("user")),
       comment: {
         id: "",
         text: "",
@@ -179,7 +184,7 @@ export default {
     },
     saveComment() {
       let data = {
-        text: this.comments.text,
+        text: this.comment.text,
         articleId: this.currentArticle.id,
         userId: JSON.parse(localStorage.getItem("user")).id,
         userName: JSON.parse(localStorage.getItem("user")).userName,
@@ -187,12 +192,12 @@ export default {
       CommentDataService.createComment(data)
         .then((response) => {
           this.comment.id = response.data.id;
-          console.log(response.data);
-          console.log(response);
           this.comments.push(this.comment);
           this.submitted = true;
-          //this.refreshPage();
+          console.log(response.data);
+          console.log(response);
           this.getArticle(this.$route.params.id);
+          //this.refreshPage();
         })
         .catch((error) => {
           console.log(error);
@@ -212,11 +217,11 @@ export default {
           console.log(e);
         });
     },
-    deleteComment() {
-      CommentDataService.deleteComment(this.currentComment.id)
+    deleteComment(commentId) {
+      CommentDataService.deleteComment(commentId)
         .then((response) => {
           console.log(response.data);
-          this.comments.splice(this.currentComment.id);
+          this.comments.splice(commentId);
           this.getArticle(this.$route.params.id);
         })
         .catch((e) => {

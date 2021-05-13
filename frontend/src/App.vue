@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <header class="container row modal-header">
+    <header class="container modal-header">
       <nav class="navbar bg-dark col-sm-12 navbar-expand-xl navbar-dark">
         <!--<a href class="navbar-brand col-sm-12" @click.prevent>-->
         <img
           alt="logo"
           src="./assets/iconwhite.png"
-          class="navbar-brand col-sm-6"
+          class="navbar-brand col-sm-5"
         />
         <button
           class="navbar-toggler"
@@ -16,7 +16,7 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarContent">
+        <div class="collapse navbar-collapse col-sm-7" id="navbarContent">
           <ul class="navbar-nav mr-auto">
             <!--<li class="nav-item">
               <router-link to="/home" class="nav-link">
@@ -32,16 +32,6 @@
             <!--<li v-if="currentUser" class="nav-item">
               <router-link to="/user" class="nav-link">Utilisateur</router-link>
             </li>-->
-            <li class="nav-item">
-              <router-link class="nav-link" to="/articles"
-                >Liste des articles</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/add"
-                >Ajouter un article</router-link
-              >
-            </li>
           </ul>
         </div>
         <div
@@ -74,6 +64,14 @@
                 <font-awesome-icon icon="user" />
                 {{ currentUser.userName }}
               </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/articles"
+                >Tous les articles</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/add">Ajouter</router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link" href @click.prevent="logOut">

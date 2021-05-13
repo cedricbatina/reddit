@@ -16,6 +16,9 @@ class UserService {
   suppressUser(id) {
     return http.delete("/user/" + id, { headers: authHeader() });
   }
+  getAllUsers() {
+    return http.get("/users");
+  }
 }
 
 /*const API_URL = "http://localhost:3000/api/";

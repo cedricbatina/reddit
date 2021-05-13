@@ -3,30 +3,36 @@
     <div class="row">
       <div class="card col-4">
         <div class="card-header">
-          <h3>Votre profil :</h3>
-          <p>{{ currentUser.userName }}</p>
+          <h3>Profil :</h3>
+          <p>
+            <strong>
+              <em> {{ currentUser.userName }} </em>
+            </strong>
+          </p>
         </div>
         <div class="card-body">
           <p>
-            Id : {{ currentUser.id }} <br />
-            Email : {{ currentUser.email }}<br />
-            Pseudo : {{ currentUser.userName }}
+            Id : <strong>{{ currentUser.id }}</strong
+            ><br />
+            Email : <strong>{{ currentUser.email }}</strong
+            ><br />
+            Pseudo : <strong>{{ currentUser.userName }}</strong>
           </p>
-          <ol>
+          <!--<ol>
             <li v-for="(role, index) in currentUser.roles" :key="index">
               {{ role }}
             </li>
-          </ol>
+          </ol>-->
         </div>
-        <div class="card-footer">
+        <div v-if="user.id != 1" class="card-footer mt-5">
           <p>(Attention!!! Cette action est irréversible)</p>
-          <button class="badge badge-danger" v-on:click="suppressAccount">
+          <button v-on:click="suppressAccount" class="btn btn-danger">
             Supprimer le compte
           </button>
         </div>
       </div>
-      <div class="col-8 card">
-        <h3 class="card-header">Listes de vos articles</h3>
+      <div class="col-8">
+        <h3 class="card-header">Mes articles</h3>
         <!--<ul>
           <li v-for="ownArticle in ownArticles" :key="ownArticle">
             {{ article.title }}
@@ -42,17 +48,10 @@
             class="list-group-item"
             :class="{ active: index == currentIndex }"
           >
-            <strong>{{ article.title }}</strong
-            >, ({{ article.comments.length }}
-            commentair(e)s)
+            <strong>{{ article.title }}</strong> | commenté
+            {{ article.comments.length }} fois
           </li>
         </ul>
-      </div>
-    </div>
-    <div class="row">
-      <label><strong>Vos articles:</strong></label>
-      <div v-for="(article, index) in articles" :key="index">
-        {{ article.title }}
       </div>
     </div>
 
@@ -64,7 +63,7 @@
 </template>
 
 <script>
-import userService from "../services/user-service";
+import UserService from "../services/user-service";
 import UserArticleDataService from "../services/UserArticleDataService";
 import ArticleDataService from "../services/ArticleDataService";
 export default {
@@ -94,11 +93,6 @@ export default {
         console.log(response.data, "article");
       });
     },
-    refreshList() {
-      this.retrieveArticles();
-      this.currentArticle = null;
-      this.currentIndex = -1;
-    },
 
     setActiveArticle(article, index) {
       this.currentArticle = article;
@@ -110,6 +104,9 @@ export default {
         .then((response) => {
           this.currentArticle = response.data;
           this.currentIndex = index;
+          this.$router.push({
+            path: "/articles/" + this.currentArticle.id,
+          });
           console.log(response.data);
         })
         .catch((e) => {
@@ -117,7 +114,7 @@ export default {
         });
     },
     suppressAccount() {
-      userService.suppressUser(this.currentUser.id);
+      UserService.suppressUser(this.currentUser.id);
       console.log(this.currentUser);
       this.$router.push("/register");
       this.$store.dispatch("auth/logout");
