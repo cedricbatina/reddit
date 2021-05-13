@@ -31,39 +31,39 @@
           </button>
         </div>
       </div>
-<<<<<<< HEAD
+
       <div class="col-8">
         <h3 class="card-header">Mes articles</h3>
-=======
-      <div class="col-8 card">
-        <h3 class="card-header">Vos articles</h3>
->>>>>>> 2c479d8b45d43cc18cf8a12128da25fb14fb5040
-        <!--<ul>
+
+        <div class="col-8 card">
+          <h3 class="card-header">Vos articles</h3>
+          <!--<ul>
           <li v-for="ownArticle in ownArticles" :key="ownArticle">
             {{ article.title }}
             {{ article.content }}
           </li>
         </ul>-->
 
-        <ul class="list-group">
-          <li
-            v-for="(article, index) in articles"
-            :key="index"
-            @click="getArticle(article.id)"
-            class="list-group-item"
-            :class="{ active: index == currentIndex }"
-          >
-            <strong>{{ article.title }}</strong> | commenté
-            {{ article.comments.length }} fois
-          </li>
-        </ul>
+          <ul class="list-group">
+            <li
+              v-for="(article, index) in articles"
+              :key="index"
+              @click="getArticle(article.id)"
+              class="list-group-item"
+              :class="{ active: index == currentIndex }"
+            >
+              <strong>{{ article.title }}</strong> | commenté
+              {{ article.comments.length }} fois
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <!--<p>
+      <!--<p>
       <strong>Token:</strong>
       {{ currentUser.accessToken.substring(0, 20) }} ... {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
     </p>-->
+    </div>
   </div>
 </template>
 
