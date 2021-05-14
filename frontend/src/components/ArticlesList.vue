@@ -1,45 +1,56 @@
 <template>
   <div class="list row">
-    <div class="col-md-6">
+    <div class="card col-md-7 border border-dark">
       <h4>Liste des articles</h4>
-      <ul class="list-group">
-        <li
-          class="list-group-item"
-          :class="{ active: index == currentIndex }"
-          v-for="(article, index) in articles"
-          :key="index"
-          @click="getArticle(article.id, index)"
-        >
-          <strong> {{ article.title }} </strong> | de
-          <em>{{ article.user.userName }}</em> | commenté
-          {{ article.comments.length }} fois
-        </li>
-      </ul>
+      <div class="card-header"></div>
+      <div class="card-body">
+        <ul class="list-group">
+          <li
+            class="list-group-item"
+            :class="{ active: index == currentIndex }"
+            v-for="(article, index) in articles"
+            :key="index"
+            @click="getArticle(article.id, index)"
+          >
+            <strong> {{ article.title }} </strong> | de
+            <em>{{ article.user.userName }}</em> | commenté
+            {{ article.comments.length }} fois
+          </li>
+        </ul>
+      </div>
 
       <!--<button v-if="currentArticle " class="m-3 btn btn-sm btn-danger" @click="removeAllArticles">
         Supprimer tous les articles
       </button>-->
     </div>
-    <div class="col-md-6 mt-5">
+    <div class="col-5">
       <div v-if="currentArticle">
         <h4>Article</h4>
         <div>
-          <label><strong>Titre:</strong></label> {{ currentArticle.title }}
+          <label><strong></strong></label>
         </div>
-        <div>
-          <label><strong>Contenu:</strong></label> {{ currentArticle.content }}
+        <div class="card border border-dark m-1">
+          <h5 class="card-header">{{ currentArticle.title }}</h5>
+          <div class="card-body">
+            <p>{{ currentArticle.content }}</p>
+          </div>
         </div>
-        <div v-if="currentArticle.comments.length > 0" class="mt-5">
-          <label><strong>Commentaires:</strong></label>
-          <ul class="list-group">
-            <li
-              v-for="(comment, index) in currentArticle.comments"
-              :key="index"
-              class="list-group-item"
-            >
-              {{ comment.text }} (par {{ comment.user.userName }})
-            </li>
-          </ul>
+        <div
+          v-if="currentArticle.comments.length > 0"
+          class="commentaires card border border-dark m-1"
+        >
+          <div class="card-header"><h4>Commentaires</h4></div>
+          <div class="card-body">
+            <ul class="list-group">
+              <li
+                v-for="(comment, index) in currentArticle.comments"
+                :key="index"
+                class="list-group-item"
+              >
+                {{ comment.text }} (par {{ comment.user.userName }})
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="mt-3">
           <a
@@ -135,5 +146,8 @@ export default {
   text-align: left;
   max-width: 750px;
   margin: auto;
+}
+h5 {
+  text-align: center;
 }
 </style>
