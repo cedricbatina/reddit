@@ -1,51 +1,83 @@
 <template>
   <div class="container">
     <header class="jumbotron">
-      <h3>{{ content }}</h3>
+      <h4>{{ content }}</h4>
     </header>
     <div class="row">
-      <div class="card col-7">
-        <div class="card-header">
-          <h3>La liste de tous les articles publiés</h3>
-        </div>
-        <div class="card-body">
-          <ul class="list-group">
-            <li
-              class="list-group-item"
-              v-for="(article, index) in articles"
-              :key="index"
-              @click="getArticle(article.id, index)"
+      <div class="col-6">
+        <h4>Liste des articles</h4>
+        <div
+          v-for="(article, index) in articles"
+          :key="index"
+          @click="getArticle(article.id, index)"
+          class="card my-3 border border-dark"
+        >
+          <div class="card-header">
+            <strong
+              ><strong>{{ article.title }}</strong
+              >, de <em>{{ article.user.userName }}</em></strong
             >
-              <strong>{{ article.title }}</strong> de
-              {{ article.user.userName }} <br />
-              <button @click="deleteArticle(article.id)" class="btn btn-danger">
-                Supprimer
-              </button>
-            </li>
-          </ul>
+          </div>
+          <div @click="getArticle(article.id)" class="card-body">
+            <p></p>
+            <p class="contenu">{{ article.content }}</p>
+            <div v-if="article.comments.length > 0" class="ml-3 commentaires">
+              <h5>Commentaires</h5>
+              <ol class="list-group">
+                <li
+                  v-for="(comment, index) in article.comments"
+                  :key="index"
+                  @click="getComment(comment.id, index)"
+                  class="border border-5 m-1"
+                >
+                  {{ comment.text }} (par {{ comment.userName }})<br />
+                  <button
+                    @click="deleteComment(comment.id)"
+                    class="btn btn-danger my-2 suppressButton"
+                  >
+                    Supprimer
+                  </button>
+                </li>
+              </ol>
+              <!--<div v-for="(comment, index) in currentArticle.comments" :key="index">
+          {{ comment.text }} (par {{ comment.user.userName }})
+        </div>-->
+            </div>
+          </div>
+          <div class="card-footer">
+            <button @click="deleteArticle(article.id)" class="btn btn-danger">
+              Supprimer cet article
+            </button>
+          </div>
         </div>
       </div>
-      <div class="card col-5">
-        <div class="card-header"><h3>Liste des utilisateurs</h3></div>
-        <div class="card-body">
-          <ul class="list-group">
-            <li
-              class="list-group-item"
-              v-for="(user, index) in users"
-              :key="index"
-            >
-              <strong> {{ user.id }} </strong> : <em> {{ user.userName }} </em
-              ><br />
-              <button
-                @click="suppressAccount(user.id)"
-                v-if="user.id != 1"
-                class="btn btn-danger"
-              >
-                Supprimer
-              </button>
-            </li>
-          </ul>
-        </div>
+      <div class="col-6">
+        <table>
+          <thead>
+            <tr>
+              <th colspan="3"><h4>Utilisateurs</h4></th>
+            </tr>
+          </thead>
+          <tbody v-for="(user, index) in users" :key="index">
+            <tr class="mx-5">
+              <td class="mr-1">
+                <strong> {{ user.id }} - </strong>
+              </td>
+              <td class="ml-3">
+                <em> {{ user.userName }} </em>
+              </td>
+              <td class="ml-3">
+                <button
+                  @click="suppressAccount(user.id)"
+                  v-if="user.id != 1"
+                  class="btn btn-danger suppressButton"
+                >
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -63,8 +95,14 @@ export default {
       users: [],
       articles: [],
       id: "",
-      userName: "",
+      //userName: JSON.parse(localStorage.getItem("comment")).userName,
       comments: [],
+      currentArticle: "",
+      comment: {
+        text: "",
+        userId: "",
+        userName: "",
+      },
     };
   },
   methods: {
@@ -86,6 +124,7 @@ export default {
     },
     suppressAccount(userId) {
       UserService.suppressUser(userId);
+      this.users.splice(this.userId);
       this.refreshPage();
     },
     getArticles() {
@@ -99,20 +138,20 @@ export default {
         .then((response) => {
           this.currentArticle = response.data;
           this.currentIndex = index;
-          /*this.$router.push({
-            path: "/articles/" + this.currentArticle.id,
-          })*/ console.log(
-            response.data
-          );
+          if (this.$route.path != "/articles/" + this.currentArticle.id) {
+            this.$router.push("/articles/" + this.currentArticle.id);
+          }
         })
         .catch((e) => {
           console.log(e);
         });
     },
+
     deleteArticle(articleId) {
       ArticleDataService.deleteArticle(articleId)
         .then((response) => {
           console.log(response.data);
+          this.articles.splice(this.articleId);
           this.refreshPage();
           //this.refreshPage();
           //this.user = JSON.parse(localStorage.getItem("comments")).id;
@@ -139,8 +178,17 @@ export default {
   },
 };
 </script>
+
 <style>
-h3 {
+h4,
+h5 {
+  text-align: center;
+}
+.commentaires {
+  font-size: 0.85em;
+}
+.card-header,
+.card-footer {
   text-align: center;
 }
 </style>

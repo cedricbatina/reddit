@@ -12,9 +12,9 @@ exports.findAll = (req, res) => {
   return Article.findAll({
     include: [
       { model: User, as: "user", attributes: ["userName"] },
-      { model: Comment, as: "comments", attributes: ["id"] },
+      { model: Comment, as: "comments", attributes: ["id", "text"] },
     ],
-    attributes: ["id", "title"],
+    attributes: ["id", "title", "content"],
     order: [["createdAt", "DESC"]],
     //where: condition,
   })

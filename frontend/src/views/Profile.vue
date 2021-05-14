@@ -32,18 +32,9 @@
         </div>
       </div>
 
-      <div class="col-8">
-        <h3 class="card-header">Mes articles</h3>
-
-        <div class="col-8 card">
-          <h3 class="card-header">Vos articles</h3>
-          <!--<ul>
-          <li v-for="ownArticle in ownArticles" :key="ownArticle">
-            {{ article.title }}
-            {{ article.content }}
-          </li>
-        </ul>-->
-
+      <div class="col-8 card">
+        <div v-if="articles.length > 0">
+          <h3 class="card-header">Mes articles</h3>
           <ul class="list-group">
             <li
               v-for="(article, index) in articles"
@@ -57,13 +48,19 @@
             </li>
           </ul>
         </div>
+        <div v-else class="mt-5">
+          <p>
+            Vous n'avez pas encore d'articles. Cliquez sur ajouter pour poster
+            un article. Vous pouvez aussi consulter la liste de tous les
+            artistes publiés sur Reddit!
+          </p>
+        </div>
       </div>
-
-      <!--<p>
+    </div>
+    <!--<p>
       <strong>Token:</strong>
       {{ currentUser.accessToken.substring(0, 20) }} ... {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
     </p>-->
-    </div>
   </div>
 </template>
 

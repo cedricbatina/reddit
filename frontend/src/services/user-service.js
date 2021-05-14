@@ -14,10 +14,10 @@ class UserService {
   }
 
   suppressUser(id) {
-    return http.delete("/user/" + id, { headers: authHeader() });
+    return http.delete("/user/" + id /*{ headers: authHeader() }*/);
   }
   getAllUsers() {
-    return http.get("/users");
+    return http.get("/users/");
   }
 }
 

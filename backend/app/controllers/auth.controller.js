@@ -106,10 +106,10 @@ exports.suppressAccount = (req, res, next) => {
 };
 exports.findAllUsers = (req, res) => {
   console.log(req); //let id = req.params.id;
-  User
-    .findAll
-    // where: { id: id },
-    ()
+  User.findAll({
+    include: { model: Article, as: "articles" },
+    attributes: ["id", "userName", "email"],
+  })
     .then((users) => {
       console.log(users);
       res.status(200).json({ users });

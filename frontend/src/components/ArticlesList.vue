@@ -1,7 +1,7 @@
 <template>
   <div class="list row">
     <div class="col-md-6">
-      <h3>Liste des articles</h3>
+      <h4>Liste des articles</h4>
       <ul class="list-group">
         <li
           class="list-group-item"

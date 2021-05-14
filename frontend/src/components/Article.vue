@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-if="currentArticle" class="card col-7">
+    <div v-if="currentArticle" class="card col-6 border border-dark">
       <div class="card-header">
         <h4>{{ currentArticle.title }}</h4>
       </div>
@@ -14,15 +14,19 @@
           <em><strong>Contenu: </strong></em> {{ currentArticle.content }}
         </p>
       </div>
-      <div v-if="currentArticle.comments.length > 0" class="ml-3">
-        <p>Commentaires de l'article:</p>
-        <ol class="list-group">
+      <div v-if="currentArticle.comments.length > 0" class="ml-2 p-2">
+        <p>
+          <strong><em>Commentaires de l'article:</em></strong>
+        </p>
+        <ol class="list-group commentaires">
           <li
             v-for="(comment, index) in currentArticle.comments"
             :key="index"
             @click="getComment(comment.id, index)"
+            class="m-1 border border-5"
           >
-            {{ comment.text }} (par {{ comment.user.userName }})<br />
+            {{ comment.text }} (par <em>{{ comment.user.userName }}</em
+            >)<br />
             <button
               v-if="
                 comment.userId === user.id ||
@@ -30,7 +34,7 @@
                 user.id === 1
               "
               @click="deleteComment(comment.id)"
-              class="btn btn-danger"
+              class="btn btn-danger my-2 suppressButton"
             >
               Supprimer
             </button>
@@ -45,14 +49,16 @@
       <br />
       <p>Cliquez sur un article !!!!...</p>
     </div>
-    <div v-if="currentArticle" class="col-5">
-      <div class="card">
-        <h4>Ajouter un commentaire:</h4>
-        <p>{{ comment.text }}</p>
-        <div class="submit-form card mt-3">
+    <div v-if="currentArticle" class="col-6">
+      <div class="card border border-dark p-2">
+        <div class="card-header border border-dark">
+          <h4 class="">Commentaire :</h4>
+          <p>{{ comment.text }}</p>
+        </div>
+        <div class="submit-form card-body mt-3">
           <div v-if="!submitted">
             <div class="form-group">
-              <label for="commentaire">Commentaire :</label>
+              <label for="commentaire">Ajouter un commentaire :</label>
               <input
                 type="text"
                 class="form-control"
@@ -62,23 +68,25 @@
                 v-model="comment.text"
               />
             </div>
-            <button class="btn btn-success" @click="saveComment">
-              Commenter
-            </button>
+            <div class="card-footer ajoutCommentaire">
+              <button class="btn btn-success" @click="saveComment">
+                Commenter
+              </button>
+            </div>
           </div>
-          <div v-else>
+          <div v-else class="ajoutCommentaire">
             <h5>Votre commentaire a été enregistré avec succès !!!</h5>
             <button class="btn btn-success" @click="newComment">
-              Ajouter un autre commentaire
+              Poster un autre commentaire
             </button>
           </div>
         </div>
       </div>
       <div
         v-if="currentArticle.userId === user.id || user.id === 1"
-        class="card mt-5"
+        class="card mt-5 border border-dark p-2"
       >
-        <h4>Editer votre article</h4>
+        <h4>Editer</h4>
         <form class="edit-form card">
           <div class="form-group">
             <label for="title">Titre</label>
@@ -98,13 +106,12 @@
               v-model="currentArticle.content"
             />
           </div>
-          <button class="btn btn-danger mr-5 ml-5 col-6" @click="deleteArticle">
+          <button class="btn btn-danger mt-3" @click="deleteArticle">
             Supprimer
           </button>
-
           <button
             type="submit"
-            class="btn btn-warning mr-5 ml-5 col-6"
+            class="btn btn-warning mt-3"
             @click="updateArticle"
           >
             Modifier
@@ -150,7 +157,6 @@ export default {
         });
     },
     refreshPage() {
-      // this.getArticle(id);
       this.getArticle(this.$route.params.id);
 
       //this.currentArticle = null;
@@ -196,8 +202,8 @@ export default {
           this.submitted = true;
           console.log(response.data);
           console.log(response);
-          this.getArticle(this.$route.params.id);
-          //this.refreshPage();
+          //this.getArticle(this.$route.params.id);
+          this.refreshPage();
         })
         .catch((error) => {
           console.log(error);
@@ -237,9 +243,21 @@ export default {
 };
 </script>
 
-<style scoped>
+<style >
 .edit-form {
   max-width: 500px;
   margin: auto;
+}
+h4 {
+  text-align: center;
+}
+.commentaires {
+  font-size: 0.8em;
+}
+.suppressButton {
+  font-size: 0.75em;
+}
+.ajoutCommentaire {
+  text-align: center;
 }
 </style>
