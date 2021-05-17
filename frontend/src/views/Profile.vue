@@ -25,8 +25,8 @@
           </ol>-->
         </div>
         <div v-if="user.id != 1" class="card-footer mt-5">
-          <p>(Attention!!! Cette action est irréversible)</p>
-          <button v-on:click="suppressAccount" class="btn btn-danger">
+          <p>Attention!!! Cette action est irréversible</p>
+          <button @click="suppressAccount" class="btn btn-danger">
             Supprimer le compte
           </button>
         </div>
@@ -83,6 +83,7 @@ export default {
       title: "",
       user: JSON.parse(localStorage.getItem("user")),
       submitted: false,
+      suppressed: false,
       //userId: "",
     };
   },
@@ -127,6 +128,7 @@ export default {
       this.$router.push("/login");
     } else {
       this.getAllarticlesByUser(this.currentUser.id);
+      this.suppressed = false;
     }
   },
 };

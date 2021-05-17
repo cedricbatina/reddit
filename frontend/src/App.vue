@@ -23,7 +23,6 @@
                 <font-awesome-icon icon="home" />Accueil
               </router-link>
             </li>-->
-
             <li v-if="showAdminBoard" class="nav-item">
               <router-link to="/admin" class="nav-link"
                 >Administrateur</router-link
@@ -33,52 +32,52 @@
               <router-link to="/user" class="nav-link">Utilisateur</router-link>
             </li>-->
           </ul>
-        </div>
-        <div
-          v-if="!currentUser"
-          class="collapse navbar-collapse"
-          id="navbarContent"
-        >
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <router-link to="/register" class="nav-link">
-                <font-awesome-icon icon="user-plus" /> Inscription
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link to="/login" class="nav-link">
-                <font-awesome-icon icon="sign-in-alt" />Connection
-              </router-link>
-            </li>
-          </ul>
-        </div>
+          <div
+            v-if="!currentUser"
+            class="collapse navbar-collapse"
+            id="navbarContent"
+          >
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <router-link to="/register" class="nav-link">
+                  <font-awesome-icon icon="user-plus" /> Inscription
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/login" class="nav-link">
+                  <font-awesome-icon icon="sign-in-alt" />Connection
+                </router-link>
+              </li>
+            </ul>
+          </div>
 
-        <div
-          v-if="currentUser"
-          class="collapse navbar-collapse"
-          id="navbarContent"
-        >
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <router-link to="/profile" class="nav-link">
-                <font-awesome-icon icon="user" />
-                {{ currentUser.userName }}
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/articles"
-                >Tous les articles</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/add">Ajouter</router-link>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href @click.prevent="logOut">
-                <font-awesome-icon icon="sign-out-alt" /> Deconnection
-              </a>
-            </li>
-          </ul>
+          <div
+            v-if="currentUser"
+            class="collapse navbar-collapse"
+            id="navbarContent"
+          >
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <router-link to="/profile" class="nav-link">
+                  <font-awesome-icon icon="user" />
+                  {{ currentUser.userName }}
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/articles"
+                  >Tous les articles</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link class="nav-link" to="/add">Ajouter</router-link>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href @click.prevent="logOut">
+                  <font-awesome-icon icon="sign-out-alt" /> Deconnection
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
     </header>

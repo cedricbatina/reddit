@@ -75,7 +75,7 @@
             </div>
           </div>
           <div v-else class="ajoutCommentaire">
-            <h5>Votre commentaire a été enregistré avec succès !!!</h5>
+            <h5>Votre commentaire a été posté avec succès !!!</h5>
             <button class="btn btn-success" @click="newComment">
               Poster un autre commentaire
             </button>
