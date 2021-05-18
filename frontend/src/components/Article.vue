@@ -47,7 +47,7 @@
     </div>
     <div v-else>
       <br />
-      <p>Cliquez sur un article !!!!...</p>
+      <p><strong>Veuillez choisir un article dans la liste !!!</strong></p>
     </div>
     <div v-if="currentArticle" class="col-6">
       <div class="card border border-dark p-2">
@@ -105,7 +105,10 @@
               v-model="currentArticle.content"
             />
           </div>
-          <button class="btn btn-danger mt-3" @click="deleteArticle">
+          <button
+            class="btn btn-danger mt-3"
+            @click="deleteArticle(currentArticle.id)"
+          >
             Supprimer
           </button>
           <button
@@ -157,9 +160,9 @@ export default {
     },
     refreshPage() {
       this.getArticle(this.$route.params.id);
-
-      //this.currentArticle = null;
-      //this.currentIndex = -1;
+    },
+    goToArticles() {
+      this.$router.push({ path: "/articles" });
     },
     updateArticle() {
       ArticleDataService.updateArticle(
@@ -175,13 +178,11 @@ export default {
         });
     },
 
-    deleteArticle() {
-      ArticleDataService.deleteArticle(this.currentArticle.id)
+    deleteArticle(articleId) {
+      ArticleDataService.deleteArticle(articleId)
         .then((response) => {
           console.log(response.data);
-          //this.refreshPage();
-          //this.user = JSON.parse(localStorage.getItem("comments")).id;
-          this.$router.push({ path: "/articles" });
+          this.goToArticles();
         })
         .catch((e) => {
           console.log(e);

@@ -117,14 +117,18 @@ export default {
       this.currentIndex = index;
       console.log(this.currentArticle, "test");
     },
-    getArticle(id, index) {
-      ArticleDataService.getOneArticle(id)
+    showArticle() {
+      this.$router.push({
+        path: "/articles/" + this.currentArticle.id,
+      });
+    },
+    getArticle(articleId, index) {
+      ArticleDataService.getOneArticle(articleId)
         .then((response) => {
           this.currentArticle = response.data;
           this.currentIndex = index;
-          this.$router.push({
-            path: "/articles/" + this.currentArticle.id,
-          });
+          this.showArticle();
+
           console.log(response.data);
         })
         .catch((e) => {
@@ -143,7 +147,7 @@ export default {
       this.$router.push("/login");
     } else {
       this.getAllarticlesByUser(this.currentUser.id);
-      this.confirmed = false;
+      //this.confirmed = false;
     }
   },
 };

@@ -1,8 +1,9 @@
 <template>
   <div class="list row">
     <div class="card col-md-7 border border-dark">
-      <h4>Liste des articles</h4>
-      <div class="card-header"></div>
+      <div class="card-header">
+        <h4>Liste des articles</h4>
+      </div>
       <div class="card-body">
         <ul class="list-group">
           <li
