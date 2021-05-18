@@ -25,10 +25,23 @@
           </ol>-->
         </div>
         <div v-if="user.id != 1" class="card-footer mt-5">
-          <p>Attention!!! Cette action est irréversible</p>
-          <button @click="suppressAccount" class="btn btn-danger">
-            Supprimer le compte
-          </button>
+          <div v-if="!confirmed">
+            <p><strong>Attention cette action est irréversible!!!</strong></p>
+            <button @click="confirmDeletion" class="btn btn-danger">
+              Supprimer le compte
+            </button>
+          </div>
+          <div v-else>
+            <p>
+              <strong
+                >Attention êtes-vous vraiment sûr(e) de supprimer votre
+                compte!!?</strong
+              >
+            </p>
+            <button @click="suppressAccount" class="btn btn-danger">
+              Supprimer le compte
+            </button>
+          </div>
         </div>
       </div>
 
@@ -83,7 +96,7 @@ export default {
       title: "",
       user: JSON.parse(localStorage.getItem("user")),
       submitted: false,
-      suppressed: false,
+      confirmed: false,
       //userId: "",
     };
   },
@@ -96,7 +109,9 @@ export default {
         console.log(response.data, "article");
       });
     },
-
+    confirmDeletion() {
+      this.confirmed = true;
+    },
     setActiveArticle(article, index) {
       this.currentArticle = article;
       this.currentIndex = index;
@@ -128,7 +143,7 @@ export default {
       this.$router.push("/login");
     } else {
       this.getAllarticlesByUser(this.currentUser.id);
-      this.suppressed = false;
+      this.confirmed = false;
     }
   },
 };

@@ -12,12 +12,6 @@ Vue.use(Router);
 export const router = new Router({
   mode: "history",
   routes: [
-    /*{
-      path: "/home",
-      name: "home",
-      component: Home,
-    },*/
-
     {
       path: "/login",
       component: Login,
@@ -66,7 +60,7 @@ export const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = [/*"/home", */ "/login", "/register"];
+  const publicPages = ["/login", "/register"];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem("user");
 

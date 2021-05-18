@@ -51,11 +51,10 @@
     </div>
     <div v-if="currentArticle" class="col-6">
       <div class="card border border-dark p-2">
-        <div class="card-header border border-dark">
-          <h4 class="">Commentaire :</h4>
-          <p>{{ comment.text }}</p>
-        </div>
+        <h4 class="card-header border border-dark">Commentaire :</h4>
         <div class="submit-form card-body mt-3">
+          <p>{{ comment.text }}</p>
+
           <div v-if="!submitted">
             <div class="form-group">
               <label for="commentaire">Ajouter un commentaire :</label>
@@ -86,10 +85,10 @@
         v-if="currentArticle.userId === user.id || user.id === 1"
         class="card mt-5 border border-dark p-2"
       >
-        <h4>Editer</h4>
+        <h4 class="card-header border border-dark">Editer</h4>
         <form class="edit-form card">
           <div class="form-group">
-            <label for="title">Titre</label>
+            <label for="title"><strong>Titre</strong> </label>
             <input
               type="text"
               class="form-control"
@@ -98,7 +97,7 @@
             />
           </div>
           <div class="form-group card">
-            <label for="description">Contenu</label>
+            <label for="description"><strong>Contenu</strong></label>
             <input
               type="text"
               class="form-control"
