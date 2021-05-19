@@ -17,21 +17,24 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse col-sm-7" id="navbarContent">
-          <ul class="navbar-nav mr-auto">
-            <!--<li class="nav-item">
+          <div>
+            <ul class="navbar-nav mr-auto">
+              <!--<li class="nav-item">
               <router-link to="/home" class="nav-link">
                 <font-awesome-icon icon="home" />Accueil
               </router-link>
             </li>-->
-            <li v-if="showAdminBoard" class="nav-item">
-              <router-link to="/admin" class="nav-link"
-                >Administrateur</router-link
-              >
-            </li>
-            <!--<li v-if="currentUser" class="nav-item">
+              <li v-if="showAdminBoard" class="nav-item">
+                <router-link to="/admin" class="nav-link"
+                  >Administrateur</router-link
+                >
+              </li>
+              <!--<li v-if="currentUser" class="nav-item">
               <router-link to="/user" class="nav-link">Utilisateur</router-link>
             </li>-->
-          </ul>
+            </ul>
+          </div>
+
           <div
             v-if="!currentUser"
             class="collapse navbar-collapse"

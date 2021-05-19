@@ -114,6 +114,7 @@ export default {
       ArticleDataService.getOneArticle(id, index)
         .then((response) => {
           this.currentArticle = response.data;
+          this.currentIndex = index;
           console.log(response.data);
         })
         .catch((error) => {
