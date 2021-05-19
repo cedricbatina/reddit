@@ -117,7 +117,7 @@
             />
           </div>
           <button
-            type="submit"
+            type="button"
             class="btn btn-warning mt-3"
             @click="updateArticle"
           >
