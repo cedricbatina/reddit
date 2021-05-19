@@ -117,17 +117,17 @@
             />
           </div>
           <button
-            class="btn btn-danger mt-3"
-            @click="deleteArticle(currentArticle.id)"
-          >
-            Supprimer
-          </button>
-          <button
             type="submit"
             class="btn btn-warning mt-3"
             @click="updateArticle"
           >
             Modifier
+          </button>
+          <button
+            class="btn btn-danger mt-3"
+            @click="deleteArticle(currentArticle.id)"
+          >
+            Supprimer
           </button>
         </form>
       </div>
