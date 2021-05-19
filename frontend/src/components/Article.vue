@@ -46,9 +46,9 @@
       <h4 class="card-header">Cet article n'existe plus</h4>
       <p class="card-body">
         <strong
-          >Cet article a été supprimé ou n'existe plus dans la base de données.
-          Veuillez choisir un article dans la Liste des articles ou ajoutez en
-          un.</strong
+          >Cet article a été supprimé par <em>{{ user.userName }}</em> ou
+          n'existe plus dans la base de données. Veuillez choisir un article
+          dans la Liste des articles ou ajoutez en un.</strong
         >
       </p>
       <div class="card-footer ajoutCommentaire">
@@ -144,6 +144,7 @@ export default {
   data() {
     return {
       currentArticle: null,
+      currentIndex: -1,
       articleDeleted: false,
       comments: [],
       //owner: JSON.parse(localStorage.getItem("user")),
@@ -228,10 +229,11 @@ export default {
       this.submitted = false;
       this.comment = {};
     },
-    getComment(id) {
-      CommentDataService.getOneComment(id)
+    getComment(commentId, index) {
+      CommentDataService.getOneComment(commentId, index)
         .then((response) => {
           this.currentComment = response.data;
+          this.currentIndex = index;
           console.log(response.data);
         })
         .catch((e) => {

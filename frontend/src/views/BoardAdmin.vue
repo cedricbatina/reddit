@@ -18,7 +18,7 @@
               >, de <em>{{ article.user.userName }}</em></strong
             >
           </div>
-          <div @click="getArticle(article.id)" class="card-body">
+          <div @click="getArticle(article.id, index)" class="card-body">
             <p></p>
             <p class="contenu">{{ article.content }}</p>
             <div v-if="article.comments.length > 0" class="ml-3 commentaires">
@@ -86,6 +86,7 @@
 <script>
 import UserService from "../services/user-service";
 import ArticleDataService from "../services/ArticleDataService";
+import CommentDataService from "../services/CommentDataService";
 
 export default {
   name: "Admin",
@@ -98,6 +99,7 @@ export default {
       //userName: JSON.parse(localStorage.getItem("comment")).userName,
       comments: [],
       currentArticle: "",
+      currentIndex: "",
       comment: {
         text: "",
         userId: "",
@@ -125,7 +127,8 @@ export default {
     suppressAccount(userId) {
       UserService.suppressUser(userId);
       this.users.splice(this.userId);
-      this.refreshPage();
+      this.getUsers();
+      this.getArticles();
     },
     getArticles() {
       ArticleDataService.getAllArticles().then((response) => {
@@ -134,7 +137,7 @@ export default {
       });
     },
     getArticle(id, index) {
-      ArticleDataService.getOneArticle(id)
+      ArticleDataService.getOneArticle(id, index)
         .then((response) => {
           this.currentArticle = response.data;
           this.currentIndex = index;
@@ -146,7 +149,12 @@ export default {
           console.log(e);
         });
     },
-
+    getComment(id, index) {
+      CommentDataService.getOneComment(id, index).then((response) => {
+        this.currentComment = response.data;
+        this.currentIndex = index;
+      });
+    },
     deleteArticle(articleId) {
       ArticleDataService.deleteArticle(articleId)
         .then((response) => {
@@ -174,7 +182,8 @@ export default {
           error.toString();
       }
     );
-    this.refreshPage();
+    this.getUsers();
+    this.getArticles();
   },
 };
 </script>
