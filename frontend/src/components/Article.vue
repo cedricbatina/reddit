@@ -40,14 +40,25 @@
             </button>
           </li>
         </ol>
-        <!--<div v-for="(comment, index) in currentArticle.comments" :key="index">
-          {{ comment.text }} (par {{ comment.user.userName }})
-        </div>-->
       </div>
     </div>
-    <div v-else>
-      <br />
-      <p><strong>Veuillez choisir un article dans la liste !!!</strong></p>
+    <div v-else class="card">
+      <h4 class="card-header">Cet article n'existe plus</h4>
+      <p class="card-body">
+        <strong
+          >Cet article a été supprimé ou n'existe plus dans la base de données.
+          Veuillez choisir un article dans la Liste des articles ou ajoutez en
+          un.</strong
+        >
+      </p>
+      <div class="card-footer ajoutCommentaire">
+        <button @click="goToArticlesList" class="btn btn-success">
+          Liste des articles
+        </button>
+        <button @click="goToAddArticle" class="btn btn-success ml-3">
+          Ajouter un article
+        </button>
+      </div>
     </div>
     <div v-if="currentArticle" class="col-6">
       <div class="card border border-dark p-2">
@@ -133,7 +144,7 @@ export default {
   data() {
     return {
       currentArticle: null,
-      //currentComment: null,
+      articleDeleted: false,
       comments: [],
       //owner: JSON.parse(localStorage.getItem("user")),
       comment: {
@@ -161,8 +172,11 @@ export default {
     refreshPage() {
       this.getArticle(this.$route.params.id);
     },
-    goToArticles() {
+    goToArticlesList() {
       this.$router.push({ path: "/articles" });
+    },
+    goToAddArticle() {
+      this.$router.push({ path: "/add" });
     },
     updateArticle() {
       ArticleDataService.updateArticle(
@@ -181,8 +195,9 @@ export default {
     deleteArticle(articleId) {
       ArticleDataService.deleteArticle(articleId)
         .then((response) => {
+          this.message = "Votre article a bien été supprimé";
           console.log(response.data);
-          this.goToArticles();
+          this.articleDeleted = true;
         })
         .catch((e) => {
           console.log(e);
@@ -239,6 +254,7 @@ export default {
     this.message = " ";
     console.log(this.$route.params);
     this.getArticle(this.$route.params.id);
+    this.articleDeleted = false;
   },
 };
 </script>

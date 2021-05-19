@@ -17,11 +17,11 @@ class ArticleDataService {
   }
 
   updateArticle(id, data) {
-    return http.put(`/articles/${id}`, data);
+    return http.put(`/articles/update/${id}`, data);
   }
 
-  deleteArticle(id) {
-    return http.delete(`/articles/${id}`);
+  deleteArticle(id, data) {
+    return http.delete(`/articles/delete/${id}`, data);
   }
 
   deleteAllArticles() {

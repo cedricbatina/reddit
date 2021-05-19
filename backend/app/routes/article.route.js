@@ -8,7 +8,7 @@ module.exports = function (app) {
   app.get("/api/articles", articles.findAll);
 
   app.get("/api/articles/:id", articles.getOneArticle);
-  app.put("/api/articles/:id", articles.modifyArticle);
+  app.put("/api/articles/update/:id", articles.modifyArticle);
 
-  app.delete("/api/articles/:id", articles.deleteArticle);
+  app.delete("/api/articles/delete/:id", articles.deleteArticle);
 };
