@@ -1,8 +1,8 @@
 <template>
   <div class="row">
-    <div v-if="currentArticle" class="card col-6 border border-dark">
-      <div class="card-header">
-        <h4 class="border border-dark">{{ currentArticle.title }}</h4>
+    <div v-if="currentArticle" class="card col-6 border border-dark p-2">
+      <div class="card-header border border-dark p-2">
+        <h4>{{ currentArticle.title }}</h4>
       </div>
       <div class="card-body">
         <p>
@@ -14,16 +14,17 @@
           <em><strong>Contenu: </strong></em> {{ currentArticle.content }}
         </p>
       </div>
-      <div v-if="currentArticle.comments.length > 0" class="ml-2 p-2">
-        <p>
+      <div v-if="currentArticle.comments.length > 0" class="card ml-2 p-2">
+        <p class="card-header">
           <strong><em>Commentaires de l'article:</em></strong>
         </p>
-        <ol class="list-group commentaires">
+        <ul class="list-group commentaires">
           <li
             v-for="(comment, index) in currentArticle.comments"
             :key="index"
             @click="getComment(comment.id, index)"
-            class="m-1 border border-5"
+            :class="{ active: index == currentIndex }"
+            class="list-group-item m-1 border border-5"
           >
             {{ comment.text }} (par <em>{{ comment.user.userName }}</em
             >)<br />
@@ -39,7 +40,7 @@
               Supprimer
             </button>
           </li>
-        </ol>
+        </ul>
       </div>
     </div>
     <div v-else class="card">
@@ -62,15 +63,17 @@
     </div>
     <div v-if="currentArticle" class="col-6">
       <div class="card border border-dark p-2">
-        <h4 class="card-header border border-dark">Commentaire :</h4>
+        <h4 class="card-header border border-dark">Commentaire</h4>
         <div class="submit-form card-body mt-3">
-          <p>{{ comment.text }}</p>
+          <div class="border border-success ajoutCommentaire">
+            <p>{{ comment.text }}</p>
+          </div>
 
           <div v-if="!submitted">
             <div class="form-group">
               <label for="commentaire">Ajouter un commentaire :</label>
               <input
-                type="text"
+                type="textarea"
                 class="form-control"
                 id="commentaire"
                 required
@@ -117,12 +120,19 @@
             />
           </div>
           <button
+            v-if="!submitted"
             type="button"
             class="btn btn-warning mt-3"
             @click="updateArticle"
           >
             Modifier
           </button>
+          <p v-else class="ajoutCommentaire">
+            <strong
+              >L'article {{ currentArticle.id }} a bien été mis à jour</strong
+            >
+          </p>
+
           <button
             class="btn btn-danger mt-3"
             @click="deleteArticle(currentArticle.id)"
@@ -145,6 +155,7 @@ export default {
     return {
       currentArticle: null,
       currentIndex: -1,
+      currentComment: null,
       articleDeleted: false,
       comments: [],
       //owner: JSON.parse(localStorage.getItem("user")),
@@ -182,7 +193,8 @@ export default {
     updateArticle() {
       ArticleDataService.updateArticle(
         this.currentArticle.id,
-        this.currentArticle
+        this.currentArticle,
+        (this.submitted = true)
       )
         .then((response) => {
           console.log(response.data);
@@ -229,8 +241,8 @@ export default {
       this.submitted = false;
       this.comment = {};
     },
-    getComment(commentId, index) {
-      CommentDataService.getOneComment(commentId, index)
+    getComment(id, index) {
+      CommentDataService.getOneComment(id, index)
         .then((response) => {
           this.currentComment = response.data;
           this.currentIndex = index;

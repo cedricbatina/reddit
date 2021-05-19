@@ -22,13 +22,13 @@
             <p></p>
             <p class="contenu">{{ article.content }}</p>
             <div v-if="article.comments.length > 0" class="ml-3 commentaires">
-              <h5>Commentaires</h5>
+              <h5>Commentaire(s)</h5>
               <ol class="list-group">
                 <li
                   v-for="(comment, index) in article.comments"
                   :key="index"
                   @click="getComment(comment.id, index)"
-                  class="border border-5 m-1"
+                  class="list-group-item border border-5 m-1"
                 >
                   {{ comment.text }} (par {{ comment.userName }})<br />
                   <button
@@ -168,6 +168,16 @@ export default {
           console.log(e);
         });
     },
+    /*removeAllArticles() {
+      ArticleDataService.deleteAllArticles() 
+        .then(response => {
+          console.log(response.data);
+          this.refreshList();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },*/
   },
 
   mounted() {

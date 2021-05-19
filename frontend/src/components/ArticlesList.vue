@@ -1,10 +1,10 @@
 <template>
-  <div class="list row">
-    <div class="card col-md-7 border border-dark">
-      <div class="card-header">
+  <div>
+    <div class="card border border-dark">
+      <div class="card-header border border-dark">
         <h4>Liste des articles</h4>
       </div>
-      <div class="card-body">
+      <div class="list card-body">
         <ul class="list-group">
           <li
             class="list-group-item"
@@ -24,11 +24,10 @@
         Supprimer tous les articles
       </button>-->
     </div>
-    <div class="col-5">
-      <div v-if="currentArticle">
-        <h4>Article</h4>
+    <div>
+      <div v-if="currentArticle" class="mt-3">
         <div>
-          <label><strong></strong></label>
+          <h4>Article {{ currentArticle.id }}</h4>
         </div>
         <div class="card border border-dark m-1">
           <h5 class="card-header">{{ currentArticle.title }}</h5>
@@ -40,15 +39,18 @@
           v-if="currentArticle.comments.length > 0"
           class="commentaires card border border-dark m-1"
         >
-          <div class="card-header"><h4>Commentaires</h4></div>
+          <div class="card-header"><h5>Commentaires</h5></div>
           <div class="card-body">
             <ul class="list-group">
               <li
                 v-for="(comment, index) in currentArticle.comments"
                 :key="index"
+                @click="getComment(comment.id, index)"
+                :class="{ active: index == currentIndex }"
                 class="list-group-item"
               >
-                {{ comment.text }} (par {{ comment.user.userName }})
+                {{ comment.id }} -- {{ comment.text }} (par
+                {{ comment.user.userName }})
               </li>
             </ul>
           </div>
@@ -75,6 +77,7 @@
 
 <script>
 import ArticleDataService from "../services/ArticleDataService";
+import CommentDataService from "../services/CommentDataService";
 export default {
   name: "ArticlesList",
   data() {
@@ -121,17 +124,18 @@ export default {
           console.log(error);
         });
     },
-
-    /*removeAllArticles() {
-      ArticleDataService.deleteAllArticles() 
-        .then(response => {
+    getComment(id, index) {
+      CommentDataService.getOneComment(id, index)
+        .then((response) => {
+          this.currentComment = response.data;
+          this.currentIndex = index;
           console.log(response.data);
-          this.refreshList();
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-    },*/
+    },
+
     goAndComment() {
       this.$router.push({
         path: "/articles/" + this.currentArticle.id,
@@ -149,6 +153,7 @@ export default {
   max-width: 750px;
   margin: auto;
 }
+h4,
 h5 {
   text-align: center;
 }

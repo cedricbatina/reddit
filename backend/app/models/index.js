@@ -24,7 +24,7 @@ db.comment = require("./comment.model")(sequelize, Sequelize);
 db.user = require("./user.model")(sequelize, Sequelize);
 db.role = require("./role.model")(sequelize, Sequelize);
 
-db.user.hasMany(db.article, { as: "articles" });
+db.user.hasMany(db.article, { as: "articles" }); // one-to-many en standard ORM
 db.article.belongsTo(db.user, {
   foreignKey: "userId",
 });
