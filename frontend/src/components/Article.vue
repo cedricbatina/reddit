@@ -2,7 +2,7 @@
   <div class="row">
     <div v-if="currentArticle" class="card col-6 border border-dark">
       <div class="card-header">
-        <h4>{{ currentArticle.title }}</h4>
+        <h4 class="border border-dark">{{ currentArticle.title }}</h4>
       </div>
       <div class="card-body">
         <p>
