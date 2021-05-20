@@ -24,15 +24,11 @@
           name="content"
         />
       </div>
-      <button @click="saveArticle" class="btn btn-success">
-        Sauvegarder l'article
-      </button>
+      <button @click="saveArticle" class="btn btn-success">Poster</button>
     </div>
     <div v-else>
       <h4>Votre article a été enregistré avec succès !!!</h4>
-      <button class="btn btn-success" @click="newArticle">
-        Ajouter un autre article
-      </button>
+      <button class="btn btn-success" @click="newArticle">Ajouter</button>
     </div>
   </div>
 </template>

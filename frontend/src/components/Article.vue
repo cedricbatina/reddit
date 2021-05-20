@@ -239,7 +239,7 @@ export default {
         });
     },
     newComment() {
-      this.submitted = false;
+      this.submittedComment = false;
       this.comment = {};
     },
     getComment(id, index) {

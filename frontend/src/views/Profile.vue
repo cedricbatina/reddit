@@ -33,13 +33,18 @@
           <div v-else>
             <p>
               <strong
-                >Attention êtes-vous vraiment sûr(e) de supprimer votre
+                >Attention êtes-vous vraiment sûr(e) de vouloir supprimer votre
                 compte!!?</strong
               >
             </p>
-            <button @click="suppressAccount" class="btn btn-danger">
-              Supprimer le compte
-            </button>
+            <div>
+              <button @click="cancelDeletion" class="btn btn-warning mr-1">
+                NON
+              </button>
+              <button @click="suppressAccount" class="btn btn-danger">
+                OUI
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -111,6 +116,9 @@ export default {
     confirmDeletion() {
       this.confirmed = true;
     },
+    cancelDeletion() {
+      this.confirmed = false;
+    },
     setActiveArticle(article, index) {
       this.currentArticle = article;
       this.currentIndex = index;
@@ -151,3 +159,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+button {
+  font-size: 0.75em bold;
+}
+</style>
