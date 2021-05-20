@@ -63,15 +63,15 @@ exports.getAllComments = (req, res) => {
   let text = req.query.text;
   console.log(text);
   Comment.findAll({
-    include: [
-      { model: User, as: "user", attributes: ["userName"] },
+    /* include: [
+      //{ model: User, as: "user", attributes: ["userName"] },
       /*{
         model: Article,
         as: "articles",
         attributes: ["id"],
-      },*/
-    ],
-    attributes: ["id", "text"],
+      },
+    ],*/
+    attributes: ["id", "text", "userName", "articleId"],
   })
     .then((comments) => res.status(200).json({ comments }))
     .catch((error) => {

@@ -1,22 +1,21 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="card col-4">
-        <div class="card-header">
-          <h3>Profil :</h3>
-          <p>
-            <strong>
-              <em> {{ currentUser.userName }} </em>
-            </strong>
-          </p>
+      <div class="card col-5">
+        <div class="card-header border border-dark">
+          <h4>Profil</h4>
         </div>
         <div class="card-body">
           <p>
-            Id : <strong>{{ currentUser.id }}</strong
-            ><br />
-            Email : <strong>{{ currentUser.email }}</strong
-            ><br />
-            Pseudo : <strong>{{ currentUser.userName }}</strong>
+            Id-<br />
+            <strong>{{ currentUser.id }}</strong>
+          </p>
+          <p>
+            Pseudo-<br /><strong>{{ currentUser.userName }}</strong>
+          </p>
+
+          <p>
+            Email-<br /><strong>{{ currentUser.email }}</strong>
           </p>
           <!--<ol>
             <li v-for="(role, index) in currentUser.roles" :key="index">
@@ -45,9 +44,9 @@
         </div>
       </div>
 
-      <div class="col-8 card">
+      <div class="col-7 card">
         <div v-if="articles.length > 0">
-          <h3 class="card-header">Mes articles</h3>
+          <h4 class="card-header">Mes articles</h4>
           <ul class="list-group">
             <li
               v-for="(article, index) in articles"

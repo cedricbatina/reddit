@@ -4,7 +4,7 @@
       <h4>{{ content }}</h4>
     </header>
     <div class="row">
-      <div class="col-6">
+      <div class="col-7">
         <h4>Liste des articles</h4>
         <div
           v-for="(article, index) in articles"
@@ -30,13 +30,7 @@
                   @click="getComment(comment.id, index)"
                   class="list-group-item border border-5 m-1"
                 >
-                  {{ comment.text }} (par {{ comment.userName }})<br />
-                  <button
-                    @click="deleteComment(comment.id)"
-                    class="btn btn-danger my-2 suppressButton"
-                  >
-                    Supprimer
-                  </button>
+                  {{ comment.id }} -- {{ comment.text }} <br />
                 </li>
               </ol>
               <!--<div v-for="(comment, index) in currentArticle.comments" :key="index">
@@ -51,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-5">
         <table>
           <thead>
             <tr>
@@ -59,18 +53,18 @@
             </tr>
           </thead>
           <tbody v-for="(user, index) in users" :key="index">
-            <tr class="mx-5">
-              <td class="mr-1">
-                <strong> {{ user.id }} - </strong>
+            <tr class="mx-2">
+              <td class="mr-2">
+                <strong> {{ user.id }}-</strong>
               </td>
-              <td class="ml-3">
+              <td class="ml-5">
                 <em> {{ user.userName }} </em>
               </td>
               <td class="ml-3">
                 <button
                   @click="suppressAccount(user.id)"
                   v-if="user.id != 1"
-                  class="btn btn-danger suppressButton"
+                  class="btn btn-danger suppressButton ml-2"
                 >
                   Supprimer
                 </button>
@@ -102,9 +96,11 @@ export default {
       currentIndex: "",
       comment: {
         text: "",
+        articleId: "",
         userId: "",
         userName: "",
       },
+      utilisateur: JSON.parse(localStorage.getItem("user")),
     };
   },
   methods: {
@@ -205,6 +201,9 @@ h5 {
 }
 .commentaires {
   font-size: 0.85em;
+}
+.suppressButton {
+  font-size: 0.75em;
 }
 .card-header,
 .card-footer {

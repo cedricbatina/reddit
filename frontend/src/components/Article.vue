@@ -69,7 +69,7 @@
             <p>{{ comment.text }}</p>
           </div>
 
-          <div v-if="!submitted">
+          <div v-if="!submittedComment">
             <div class="form-group">
               <label for="commentaire">Ajouter un commentaire :</label>
               <input
@@ -167,6 +167,7 @@ export default {
         userName: "",
       },
       submitted: false,
+      submittedComment: false,
       user: JSON.parse(localStorage.getItem("user")),
     };
   },
@@ -227,7 +228,7 @@ export default {
         .then((response) => {
           this.comment.id = response.data.id;
           this.comments.push(this.comment);
-          this.submitted = true;
+          this.submittedComment = true;
           console.log(response.data);
           console.log(response);
           //this.getArticle(this.$route.params.id);
@@ -285,9 +286,12 @@ h4 {
   font-size: 0.8em;
 }
 .suppressButton {
-  font-size: 0.75em;
+  font-size: 0.5em bold;
 }
 .ajoutCommentaire {
   text-align: center;
+}
+button {
+  font-size: 0.75em bold;
 }
 </style>
