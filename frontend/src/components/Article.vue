@@ -15,8 +15,8 @@
         </p>
       </div>
       <div v-if="currentArticle.comments.length > 0" class="card ml-2 p-2">
-        <p class="card-header">
-          <strong><em>Commentaires de l'article:</em></strong>
+        <p class="card-header ajoutCommentaire">
+          <strong><em>Commentaires de l'article</em></strong>
         </p>
         <ul class="list-group commentaires">
           <li
@@ -71,7 +71,7 @@
 
           <div v-if="!submittedComment">
             <div class="form-group">
-              <label for="commentaire">Ajouter un commentaire :</label>
+              <label for="commentaire">Ajouter un commentaire </label>
               <input
                 type="textarea"
                 class="form-control"
@@ -291,7 +291,7 @@ h4 {
 .ajoutCommentaire {
   text-align: center;
 }
-button {
+/*button {
   font-size: 0.75em bold;
-}
+}*/
 </style>
