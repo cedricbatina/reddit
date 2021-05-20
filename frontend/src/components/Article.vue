@@ -15,7 +15,7 @@
         </p>
       </div>
       <div v-if="currentArticle.comments.length > 0" class="card ml-2 p-2">
-        <p class="card-header ajoutCommentaire">
+        <p class="card-header ajoutCommentaire border border-dark">
           <strong><em>Commentaires de l'article</em></strong>
         </p>
         <ul class="list-group commentaires">
@@ -26,7 +26,8 @@
             :class="{ active: index == currentIndex }"
             class="list-group-item m-1 border border-5"
           >
-            {{ comment.text }} (par <em>{{ comment.user.userName }}</em
+            {{ comment.id }} -- {{ comment.text }} (par
+            <em>{{ comment.user.userName }}</em
             >)<br />
             <button
               v-if="
