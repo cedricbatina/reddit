@@ -3,75 +3,70 @@
     <header class="jumbotron">
       <h4>{{ content }}</h4>
     </header>
-    <div class="row">
-      <div class="col-7">
-        <h4>Liste des articles</h4>
-        <div
-          v-for="(article, index) in articles"
-          :key="index"
-          @click="getArticle(article.id, index)"
-          class="card my-3 border border-dark"
-        >
-          <div class="card-header">
-            <strong
-              ><strong>{{ article.title }}</strong
-              >, de <em>{{ article.user.userName }}</em></strong
-            >
-          </div>
-          <div @click="getArticle(article.id, index)" class="card-body">
-            <p></p>
-            <p class="contenu">{{ article.content }}</p>
-            <div v-if="article.comments.length > 0" class="ml-3 commentaires">
-              <h5>Commentaire(s)</h5>
-              <ol class="list-group">
-                <li
-                  v-for="(comment, index) in article.comments"
-                  :key="index"
-                  @click="getComment(comment.id, index)"
-                  class="list-group-item border border-5 m-1"
-                >
-                  {{ comment.id }} -- {{ comment.text }} <br />
-                </li>
-              </ol>
-              <!--<div v-for="(comment, index) in currentArticle.comments" :key="index">
-          {{ comment.text }} (par {{ comment.user.userName }})
-        </div>-->
-            </div>
-          </div>
-          <div class="card-footer">
-            <button @click="deleteArticle(article.id)" class="btn btn-danger">
-              Supprimer cet article
-            </button>
-          </div>
+    <div>
+      <div class="card border border-dark">
+        <div class="card-header border border-dark">
+          <h4>Liste des utilisateurs</h4>
+        </div>
+        <div class="card-body" v-for="(user, index) in users" :key="index">
+          <p>
+            <strong> {{ user.id }} -- {{ user.userName }}</strong>
+          </p>
+          <button
+            @click="suppressAccount(user.id)"
+            v-if="user.id != 1"
+            class="btn btn-danger suppressButton ml-2"
+          >
+            Supprimer
+          </button>
         </div>
       </div>
-      <div class="col-5">
-        <table>
-          <thead>
-            <tr>
-              <th colspan="3"><h4>Utilisateurs</h4></th>
-            </tr>
-          </thead>
-          <tbody v-for="(user, index) in users" :key="index">
-            <tr class="mx-2">
-              <td class="mr-2">
-                <strong> {{ user.id }}-</strong>
-              </td>
-              <td class="ml-5">
-                <em> {{ user.userName }} </em>
-              </td>
-              <td class="ml-3">
-                <button
-                  @click="suppressAccount(user.id)"
-                  v-if="user.id != 1"
-                  class="btn btn-danger suppressButton ml-2"
-                >
-                  Supprimer
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    </div>
+    <div class="mt-3">
+      <h4>Liste des articles</h4>
+      <div
+        v-for="(article, index) in articles"
+        :key="index"
+        @click="getArticle(article.id, index)"
+        class="card my-3 border border-dark"
+      >
+        <div class="card-header">
+          <p>
+            <strong> {{ article.id }} -- {{ article.title }}</strong
+            ><br />
+
+            posté par
+            <strong
+              ><em>{{ article.user.userName }}</em></strong
+            ><br />
+            le
+            {{
+              new Date(article.createdAt).toLocaleDateString("fr-FR", options)
+            }}
+          </p>
+        </div>
+        <div @click="getArticle(article.id, index)" class="card-body">
+          <p></p>
+          <p class="contenu">{{ article.content }}</p>
+          <div v-if="article.comments.length > 0" class="ml-3 commentaires">
+            <h5>Commentaire(s)</h5>
+            <ol class="list-group">
+              <li
+                v-for="(comment, index) in article.comments"
+                :key="index"
+                @click="getComment(comment.id, index)"
+                class="list-group-item border border-5 m-1"
+              >
+                {{ comment.id }} -- {{ comment.text }} <br />
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button @click="deleteArticle(article.id)" class="btn btn-danger">
+            Supprimer cet article
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -90,7 +85,6 @@ export default {
       users: [],
       articles: [],
       id: "",
-      //userName: JSON.parse(localStorage.getItem("comment")).userName,
       comments: [],
       currentArticle: "",
       currentIndex: "",
@@ -101,6 +95,18 @@ export default {
         userName: "",
       },
       utilisateur: JSON.parse(localStorage.getItem("user")),
+      options: {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      },
+      currentTime: "", // date envoyée par ta bas de données
+      frenchFormat: "",
     };
   },
   methods: {
@@ -108,12 +114,9 @@ export default {
       UserService.getAllUsers()
         .then((response) => {
           this.users = response.data.users;
-          //this.userName = response.data.userName;
-
-          console.log(response.data, "users");
         })
         .catch((error) => {
-          console.log(error);
+          error;
         });
     },
     refreshPage() {
@@ -129,7 +132,6 @@ export default {
     getArticles() {
       ArticleDataService.getAllArticles().then((response) => {
         this.articles = response.data.articles;
-        console.log(response.data, "article");
       });
     },
     getArticle(id, index) {
@@ -141,8 +143,8 @@ export default {
             this.$router.push("/articles/" + this.currentArticle.id);
           }
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          error;
         });
     },
     getComment(id, index) {
@@ -153,27 +155,14 @@ export default {
     },
     deleteArticle(articleId) {
       ArticleDataService.deleteArticle(articleId)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           this.articles.splice(this.articleId);
           this.refreshPage();
-          //this.refreshPage();
-          //this.user = JSON.parse(localStorage.getItem("comments")).id;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          error;
         });
     },
-    /*removeAllArticles() {
-      ArticleDataService.deleteAllArticles() 
-        .then(response => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },*/
   },
 
   mounted() {

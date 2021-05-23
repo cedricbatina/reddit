@@ -105,12 +105,10 @@ exports.suppressAccount = (req, res, next) => {
     });
 };
 exports.findAllUsers = (req, res) => {
-  console.log(req); //let id = req.params.id;
   User.findAll({
     attributes: ["id", "userName", "email"],
   })
     .then((users) => {
-      console.log(users);
       res.status(200).json({ users });
     })
     .catch((error) => console.log(error));

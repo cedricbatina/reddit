@@ -18,21 +18,16 @@ exports.getOneComment = (req, res, next) => {
   })
     .then((data) => {
       res.send(data);
-      console.log("comment", data);
     })
     .catch((err) => {
-      console.log(err);
       res.end();
       res.status(500).send({
-        message:
-          "Une erreur est parvenue en voulant accéder au commentaire " + id,
+        err,
       });
     });
 };
 
 exports.createComment = (req, res) => {
-  console.log(req.body);
-  //const userId = localStorage.getItem("user").id;
   if (!req.body.text) {
     res.status(400).send({
       message: "Le texte ne peut être vide !!!",
@@ -54,32 +49,20 @@ exports.createComment = (req, res) => {
       })
     )
     .catch((error) => {
-      console.log(error);
-      res.status(400).json({ message: "il y a une erreur", error });
+      res.status(400).json({ message: error });
     });
 };
 
 exports.getAllComments = (req, res) => {
   let text = req.query.text;
-  console.log(text);
   Comment.findAll({
-    /* include: [
-      //{ model: User, as: "user", attributes: ["userName"] },
-      /*{
-        model: Article,
-        as: "articles",
-        attributes: ["id"],
-      },
-    ],*/
     attributes: ["id", "text", "userName", "articleId"],
   })
     .then((comments) => res.status(200).json({ comments }))
     .catch((error) => {
-      console.log(error);
       res.status(500).json({ error });
     });
 };
-//// GOING TO BED I WILL CONTINUE TOMORROW. AM WORKING IN PROGRESS
 
 exports.deleteComment = (req, res, next) => {
   const id = req.params.id;

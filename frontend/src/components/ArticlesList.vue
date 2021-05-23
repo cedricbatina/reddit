@@ -13,16 +13,22 @@
             :key="index"
             @click="getArticle(article.id, index)"
           >
-            <strong> {{ article.title }} </strong> | de
-            <em>{{ article.user.userName }}</em> | commenté
-            {{ article.comments.length }} fois
+            <strong> {{ article.id }} -- {{ article.title }} </strong><br />
+            posté par
+            <strong
+              ><em>{{ article.user.userName }}</em></strong
+            ><br />
+
+            <span class="ajoutCommentaire">
+              le
+              {{
+                new Date(article.createdAt).toLocaleDateString("fr-FR", options)
+              }}</span
+            ><br />
+            {{ article.comments.length }} commentaire(s) <br />
           </li>
         </ul>
       </div>
-
-      <!--<button v-if="currentArticle " class="m-3 btn btn-sm btn-danger" @click="removeAllArticles">
-        Supprimer tous les articles
-      </button>-->
     </div>
     <div>
       <div v-if="currentArticle" class="mt-3">
@@ -89,7 +95,16 @@ export default {
       user: JSON.parse(localStorage.getItem("user")),
       comments: [],
       submitted: false,
-      //commentaires: JSON.parse(localStorage.getItem("comments")),
+      options: {
+        weekday: "long",
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      },
     };
   },
   methods: {
@@ -97,31 +112,25 @@ export default {
       ArticleDataService.getAllArticles()
         .then((response) => {
           this.articles = response.data.articles;
-          console.log(response.data, "article");
         })
         .catch((error) => {
-          console.log(error);
+          error;
         });
     },
+
     refreshList() {
       this.retrieveArticles();
       this.currentArticle = null;
       this.currentIndex = -1;
-    } /*
-    setActiveArticle(article, index) {
-      this.currentArticle = article;
-      this.currentIndex = index;
-      console.log(this.currentArticle, "test");
-    },*/,
+    },
     getArticle(id, index) {
       ArticleDataService.getOneArticle(id, index)
         .then((response) => {
           this.currentArticle = response.data;
           this.currentIndex = index;
-          console.log(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          error;
         });
     },
     getComment(id, index) {
@@ -129,10 +138,9 @@ export default {
         .then((response) => {
           this.currentComment = response.data;
           this.currentIndex = index;
-          console.log(response.data);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          error;
         });
     },
 

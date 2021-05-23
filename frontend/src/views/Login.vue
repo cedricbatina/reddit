@@ -86,6 +86,7 @@ export default {
       this.$router.push("/BoardUser");
     }
   },
+  // In the handleLogin() function, i dispatch 'auth/login' Action to Vuex Store. If the login is true, go to Profile Page, otherwise, show error message.
   methods: {
     handleLogin() {
       this.loading = true;

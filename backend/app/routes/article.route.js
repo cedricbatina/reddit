@@ -1,4 +1,3 @@
-//const articles = require("../controllers/article.controller");
 const articles = require("../controllers/articleController");
 const { onlyArticleByUser } = require("../middleware");
 

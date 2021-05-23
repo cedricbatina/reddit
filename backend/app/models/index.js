@@ -37,8 +37,7 @@ db.comment.belongsTo(db.user, {
   foreignKey: "userId",
   as: "user",
 });
-// to indicate that the user model can belong to many Roles and vice versa.
-// a new table user_roles as connection between users and roles table via their primary key as foreign keys.
+// a new pivot table user_roles as connection between users and roles table via their primary key as foreign keys.
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",

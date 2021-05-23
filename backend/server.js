@@ -20,20 +20,7 @@ app.use((req, res, next) => {
   );
   next();
 });
-/*
-const corsOptions = {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
-  //origin: "http://localhost:3001",
-};
-*/
+
 //app.use(cors(corsOptions));
 // parse requests of content-type - application/json
 app.use(bodyParser.json()); //192.168.1.187:3004/
@@ -82,11 +69,6 @@ require("./app/routes/auth.route")(app);
 require("./app/routes/article.route")(app);
 require("./app/routes/comment.route")(app);
 require("./app/routes/userArticle.route")(app);
-//app.use("/api/articles", articleRoutes);
-//require("./app/routes/comment.route")(app);
-//app.use("/api/users", userRoutes);
-//app.use("/api/auth", authRoutes);
-//app.use("/api/user", router);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3001;

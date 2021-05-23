@@ -1,3 +1,5 @@
+// defining Vuex Authentication module that contains: state, actions and mutations
+
 import AuthService from "../services/auth.service";
 
 const user = JSON.parse(localStorage.getItem("user"));
@@ -59,3 +61,7 @@ export const auth = {
     },
   },
 };
+
+//This page has a Form with 2 Field: username & password. I use veeValidate  to validate input. If there is an invalid field, we show the error message.
+
+//We check user logged in status using Vuex Store: this.$store.state.auth.status.loggedIn. If the status is true, we use Vue Router to direct user to Profile Page:

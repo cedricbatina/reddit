@@ -1,4 +1,4 @@
-// creating the article model. the id, and created and updated times will be provided automatically by mysql
+//const moment = require("moment");
 
 module.exports = (sequelize, Sequelize) => {
   const Article = sequelize.define("articles", {

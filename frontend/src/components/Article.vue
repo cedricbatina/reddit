@@ -1,14 +1,26 @@
 <template>
-  <div class="row">
-    <div v-if="currentArticle" class="card col-6 border border-dark p-2">
+  <div>
+    <div v-if="currentArticle" class="card row border border-dark p-2">
       <div class="card-header border border-dark p-2">
-        <h4>{{ currentArticle.title }}</h4>
+        <h4>{{ currentArticle.id }} -- {{ currentArticle.title }}</h4>
       </div>
       <div class="card-body">
         <p>
           <em
             ><strong>Auteur: {{ currentArticle.userName }}</strong></em
           >
+        </p>
+        <p>
+          <em>
+            <strong>Crée le: </strong>
+
+            {{
+              new Date(currentArticle.createdAt).toLocaleDateString(
+                "fr-FR",
+                options
+              )
+            }}
+          </em>
         </p>
         <p>
           <em><strong>Contenu: </strong></em> {{ currentArticle.content }}
@@ -62,8 +74,8 @@
         </button>
       </div>
     </div>
-    <div v-if="currentArticle" class="col-6">
-      <div class="card border border-dark p-2">
+    <div v-if="currentArticle">
+      <div class="card border border-dark p-2 row mt-3">
         <h4 class="card-header border border-dark">Commentaire</h4>
         <div class="submit-form card-body mt-3">
           <div class="border border-success ajoutCommentaire">
@@ -98,12 +110,12 @@
       </div>
       <div
         v-if="currentArticle.userId === user.id || user.id === 1"
-        class="card mt-5 border border-dark p-2"
+        class="card border border-dark p-2 row mt-3"
       >
         <h4 class="card-header border border-dark">Editer</h4>
-        <form class="edit-form card">
+        <form class="edit-form card-body">
           <div class="form-group">
-            <label for="title"><strong>Titre</strong> </label>
+            <label for="title p-2"><strong>Titre</strong> </label>
             <input
               type="text"
               class="form-control"
@@ -111,8 +123,8 @@
               v-model="currentArticle.title"
             />
           </div>
-          <div class="form-group card">
-            <label for="description"><strong>Contenu</strong></label>
+          <div class="form-group">
+            <label for="description p-2"><strong>Contenu</strong></label>
             <input
               type="text"
               class="form-control"
@@ -120,26 +132,28 @@
               v-model="currentArticle.content"
             />
           </div>
-          <button
-            v-if="!submitted"
-            type="button"
-            class="btn btn-warning mt-3"
-            @click="updateArticle"
-          >
-            Modifier
-          </button>
-          <p v-else class="ajoutCommentaire">
-            <strong
-              >L'article {{ currentArticle.id }} a bien été mis à jour</strong
+          <div class="card-footer">
+            <button
+              v-if="!submitted"
+              type="button"
+              class="btn btn-warning m-1"
+              @click="updateArticle"
             >
-          </p>
+              Modifier
+            </button>
+            <p v-else class="ajoutCommentaire m-1">
+              <strong
+                >L'article {{ currentArticle.id }} a bien été mis à jour</strong
+              >
+            </p>
 
-          <button
-            class="btn btn-danger mt-3"
-            @click="deleteArticle(currentArticle.id)"
-          >
-            Supprimer
-          </button>
+            <button
+              class="btn btn-danger m-1"
+              @click="deleteArticle(currentArticle.id)"
+            >
+              Supprimer
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -159,7 +173,6 @@ export default {
       currentComment: null,
       articleDeleted: false,
       comments: [],
-      //owner: JSON.parse(localStorage.getItem("user")),
       comment: {
         id: "",
         text: "",
@@ -170,6 +183,15 @@ export default {
       submitted: false,
       submittedComment: false,
       user: JSON.parse(localStorage.getItem("user")),
+      options: {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      },
     };
   },
   methods: {
@@ -177,10 +199,9 @@ export default {
       ArticleDataService.getOneArticle(id)
         .then((response) => {
           this.currentArticle = response.data;
-          console.log(response.data);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          this.message = error;
         });
     },
     refreshPage() {
@@ -198,24 +219,22 @@ export default {
         this.currentArticle,
         (this.submitted = true)
       )
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           this.message = "Votre article a bien été mis à jour";
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          this.message = error;
         });
     },
 
     deleteArticle(articleId) {
       ArticleDataService.deleteArticle(articleId)
-        .then((response) => {
+        .then(() => {
           this.message = "Votre article a bien été supprimé";
-          console.log(response.data);
           this.articleDeleted = true;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          this.message = error;
         });
     },
     saveComment() {
@@ -230,13 +249,10 @@ export default {
           this.comment.id = response.data.id;
           this.comments.push(this.comment);
           this.submittedComment = true;
-          console.log(response.data);
-          console.log(response);
-          //this.getArticle(this.$route.params.id);
           this.refreshPage();
         })
         .catch((error) => {
-          console.log(error);
+          error;
         });
     },
     newComment() {
@@ -248,7 +264,6 @@ export default {
         .then((response) => {
           this.currentComment = response.data;
           this.currentIndex = index;
-          console.log(response.data);
         })
         .catch((e) => {
           console.log(e);
@@ -256,19 +271,17 @@ export default {
     },
     deleteComment(commentId) {
       CommentDataService.deleteComment(commentId)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           this.comments.splice(commentId);
           this.getArticle(this.$route.params.id);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((error) => {
+          console.log(error);
         });
     },
   },
   mounted() {
     this.message = " ";
-    console.log(this.$route.params);
     this.getArticle(this.$route.params.id);
     this.articleDeleted = false;
   },
@@ -292,7 +305,4 @@ h4 {
 .ajoutCommentaire {
   text-align: center;
 }
-/*button {
-  font-size: 0.75em bold;
-}*/
 </style>

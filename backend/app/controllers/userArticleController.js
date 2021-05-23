@@ -4,8 +4,6 @@ const User = require("../models/index").user;
 
 exports.findAllArticlesByUser = (req, res, next) => {
   let userId = req.params.userId;
-  //let user = User.id;
-  //console.log(id, userId);
   return Article.findAll({
     where: { userId: userId },
     include: [
@@ -20,16 +18,11 @@ exports.findAllArticlesByUser = (req, res, next) => {
         attributes: ["id"],
       },
     ],
-    attributes: ["id", "title"],
-    order: [["createdAt", "DESC"]],
-    //where: condition,
+    attributes: ["id", "title", "createdAt"],
+    order: [["id", "DESC"]],
   })
     .then((articles) => {
-      console.log(articles), res.status(200).json({ articles });
+      res.status(200).json({ articles });
     })
-    .catch(
-      (error) => console.log(error)
-
-      // res.status(500).json({ message: "Il y a une erreur" })
-    );
+    .catch((error) => res.status(400).json({ error }));
 };
