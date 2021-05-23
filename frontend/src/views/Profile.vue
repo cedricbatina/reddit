@@ -44,7 +44,7 @@
     </div>
 
     <div v-if="articles.length > 0" class="card border border-dark my-2">
-      <h4 class="card-header">Mes articles</h4>
+      <h4 class="card-header border border-dark">Mes articles</h4>
       <ul class="list-group">
         <li
           v-for="(article, index) in articles"
